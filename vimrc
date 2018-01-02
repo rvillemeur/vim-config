@@ -20,41 +20,24 @@ Plugin 'VundleVim/Vundle.vim'
 
 " My Bundles here:
 " vim feature
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-obsession'
 Plugin 'tpope/vim-fugitive'
 Plugin 'gregsexton/gitv'
 Plugin 'scrooloose/nerdtree'
-" Bundle 'chrisbra/csv.vim'
 Plugin 'tpope/vim-abolish'
 Plugin 'kien/ctrlp.vim'
 Plugin 'kshenoy/vim-signature'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'christoomey/vim-tmux-navigator'
-"Bundle 'file:///home/gnome/.vim/bundle/project'
-" C - C++ development
-" Bundle 'Valloric/YouCompleteMe'
-" Bundle 'vim-scripts/CRefVim'
-" Bundle 'vim-scripts/gtk-vim-syntax'
-" Bundle 'vim-scripts/taglist.vim'
-" Plugin 'scrooloose/syntastic'
-" Bundle 'a.vim'
+plugin 'vimplugin/project.vim'
 "nodejs - web development
-" Plugin 'tpope/vim-surround'
-" Bundle 'digitaltoad/vim-jade'
-" Bundle 'sukima/xmledit'
-" Bundle 'ternjs/tern_for_vim'
-" Plugin 'othree/html5.vim'
-" Bundle 'file:///home/gnome/.vim/bundle/html'
-" Bundle 'vim-scripts/closetag.vim'
-" python development
-" Bundle 'klen/python-mode'
-" Bundle 'davidhalter/jedi-vim'
-" vim-scripts repos
-"Bundle 'L9'
-"Bundle 'FuzzyFinder'
+Plugin 'tpope/vim-surround'
+Plugin 'digitaltoad/vim-jade'
+Plugin 'sukima/xmledit'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'othree/html5.vim'
+Plugin 'vim-scripts/closetag.vim'
 " Pillar file handling
 Plugin 'cdlm/vim-pillar'
 
