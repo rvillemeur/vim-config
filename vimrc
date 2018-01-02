@@ -13,7 +13,7 @@ set langmenu=en_US.UTF-8
 " {{{ VUNDLE set-up
 filetype off                   " required!
 set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call vundle#begin(~/.vim/bundle)
 
 " let Vundle manage Vundle - required! 
 Plugin 'VundleVim/Vundle.vim'
