@@ -13,8 +13,7 @@ set langmenu=en_US.UTF-8
 " {{{ VUNDLE set-up
 filetype off                   " required!
 set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin(~/.vim/bundle)
-
+call vundle#rc('~/.vim/bundle')
 " let Vundle manage Vundle - required! 
 Plugin 'VundleVim/Vundle.vim'
 
@@ -30,7 +29,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'kshenoy/vim-signature'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'christoomey/vim-tmux-navigator'
-plugin 'vimplugin/project.vim'
+Plugin 'vimplugin/project.vim'
 "nodejs - web development
 Plugin 'tpope/vim-surround'
 Plugin 'digitaltoad/vim-jade'
