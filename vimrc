@@ -44,13 +44,12 @@ Plugin 'scrooloose/nerdtree'
 "Plugin 'kien/ctrlp.vim'
 "Plugin 'kshenoy/vim-signature'
 "Plugin 'fholgado/minibufexpl.vim'
- Plugin 'jlanzarotta/bufexplorer'
+Plugin 'jlanzarotta/bufexplorer'
 if !has('win32') 
 	Plugin 'christoomey/vim-tmux-navigator'
 endif
-"Plugin 'vimplugin/project.vim'
-
-
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
 
 "automatic loading of plugin and indent rule, bases on file type
 filetype plugin on
