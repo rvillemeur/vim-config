@@ -1,8 +1,17 @@
+"note pour windows
+"ajouter la variable d'environnement MYVIMRC dans le profil utilisateur pour
+"choisir le fichier de démarrage spécifique.
+"MYVIMRC=%USERPROFILE%\Documents\perso\vim\_vimrc
+
 " Ne pas assurer la compatibilité avec l'ancien Vi
 set nocompatible
+
 "vim sera toujours en anglais
 set langmenu=en_US.UTF-8
-"language US
+language US
+" encodage par défaut
+set encoding=utf-8
+
 
 " {{{ windows set-up 
 "if has("windows")
@@ -12,33 +21,35 @@ set langmenu=en_US.UTF-8
 " }}} end windows set-up
 " {{{ VUNDLE set-up
 filetype off                   " required!
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#rc('~/.vim/bundle')
+if has('windows')
+    set runtimepath=$VIMRUNTIME
+    set runtimepath+=C:/devzone/vim/bundle
+    set runtimepath+=C:/devzone/vim/bundle/Vundle.vim/
+    call vundle#begin('C:\devzone\vim\bundle')
+else
+    set rtp+=~/.vim/bundle/Vundle.vim
+    call vundle#rc('~/.vim/bundle')
+endif
 " let Vundle manage Vundle - required! 
 Plugin 'VundleVim/Vundle.vim'
 
 " My Bundles here:
 " vim feature
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'tpope/vim-obsession'
-Plugin 'tpope/vim-fugitive'
-Plugin 'gregsexton/gitv'
+"Plugin 'tpope/vim-obsession'
+"Plugin 'tpope/vim-fugitive'
+"Plugin 'gregsexton/gitv'
 Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-abolish'
-Plugin 'kien/ctrlp.vim'
-Plugin 'kshenoy/vim-signature'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'vimplugin/project.vim'
-"nodejs - web development
-Plugin 'tpope/vim-surround'
-Plugin 'digitaltoad/vim-jade'
-Plugin 'sukima/xmledit'
-Plugin 'ternjs/tern_for_vim'
-Plugin 'othree/html5.vim'
-Plugin 'vim-scripts/closetag.vim'
-" Pillar file handling
-Plugin 'cdlm/vim-pillar'
+"Plugin 'tpope/vim-abolish'
+"Plugin 'kien/ctrlp.vim'
+"Plugin 'kshenoy/vim-signature'
+"Plugin 'fholgado/minibufexpl.vim'
+ Plugin 'jlanzarotta/bufexplorer'
+if !has('win32') 
+	Plugin 'christoomey/vim-tmux-navigator'
+endif
+"Plugin 'vimplugin/project.vim'
+
 
 
 "automatic loading of plugin and indent rule, bases on file type
@@ -48,6 +59,11 @@ filetype indent on
 " {{{ definition des options de vim
 " langue des documents
 set spelllang=fr_FR
+
+" Minibuffer explorer configuration
+let g:miniBufExplVSplit = 25   " column width in chars
+let g:miniBufExplBRSplit = 0   " Put new window below
+let g:miniBufExplAutoStart = 1 " Autostart Mini buf explorer
 
 " controle mieux le copier/coller du systeme
 set paste
@@ -68,7 +84,7 @@ syntax sync fromstart
 
 
 "affiche par défaut les tabs de fenetre
-"set showtabline=2
+set showtabline=2
 
 " ajout de la numérotation des lignes
 set number
@@ -140,9 +156,6 @@ set incsearch   " met en valeur le motif de recherche
 set showmatch   " met en valeur le motif de recherche
 set hlsearch    " met en valeur le motif de recherche
 
-" airline configuration
-let g:airline_powerline_fonts=1
-
 " }}}
 " {{{ Définition de la barre de status
 " Affiche une barre de status en bas de l'écran
@@ -199,6 +212,31 @@ function! DiffWithFileFromDisk()
   diffthis
 endfunction
 
+function! SaveSession()
+    if has('win32')
+        execute 'mksession! c:\devzone\vim\session.vim'
+    else
+        execute 'call mkdir(%:p:h/.vim)'
+        execute 'mksession! %:p:h/.vim/session.vim'
+    endif
+endfunction
+
+function! RestoreSession()
+    if has('win32')
+        execute 'source c:\devzone\vim\session.vim'
+    else
+        execute 'so %:p:h/.vim/session.vim'
+    endif
+    if bufexists(1)
+        for l in range(1, bufnr('$'))
+            if bufwinnr(l) == -1
+                exec 'sbuffer ' . l
+            endif
+        endfor
+    endif
+endfunction
+
+
 function! SuperCleverTab()
   "check if at beginning of line or after a space
   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
@@ -243,7 +281,11 @@ nnoremap <BS> <C-T>
 " recharger le fichier $HOME/.vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " édite le fichier $HOME/.vimrc
-noremap <leader>ev :vsplit $MYVIMRC<cr>
+if has('win32')
+    noremap <leader>ev :vsplit c:\devzone\vim\vim-config\vimrc<cr>
+else
+   noremap <leader>ev :vsplit $MYVIMRC<cr>
+endif
 
 " Déplacement dans le fichier
 nnoremap <up> <nop>
@@ -293,6 +335,119 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 " bind function to the tab key
 "inoremap <C-Tab>=SuperCleverTab()
 
+" set the 'cpoptions' to its Vim default
+if 1	" only do this when compiled with expression evaluation
+  let s:save_cpo = &cpoptions
+endif
+set cpo&vim
+
+" Set options and add mapping such that Vim behaves a lot like MS-Windows
+" backspace and cursor keys wrap to previous/next line
+set backspace=indent,eol,start whichwrap+=<,>,[,]
+
+" backspace in Visual mode deletes selection
+vnoremap <BS> d
+
+if has("clipboard")
+    " CTRL-X and SHIFT-Del are Cut
+    vnoremap <C-X> "+x
+    vnoremap <S-Del> "+x
+
+    " CTRL-C and CTRL-Insert are Copy
+    vnoremap <C-C> "+y
+    vnoremap <C-Insert> "+y
+
+    " CTRL-V and SHIFT-Insert are Paste
+    map <C-V>		"+gP
+    map <S-Insert>		"+gP
+
+    cmap <C-V>		<C-R>+
+    cmap <S-Insert>		<C-R>+
+endif
+
+" Pasting blockwise and linewise selections is not possible in Insert and
+" Visual mode without the +virtualedit feature.  They are pasted as if they
+" were characterwise instead.
+" Uses the paste.vim autoload script.
+" Use CTRL-G u to have CTRL-Z only undo the paste.
+
+if 1
+    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
+    exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
+endif
+
+imap <S-Insert>		<C-V>
+vmap <S-Insert>		<C-V>
+
+" Use CTRL-Q to do what CTRL-V used to do
+noremap <C-Q>		<C-V>
+
+" Use CTRL-S for saving, also in Insert mode
+noremap <C-S>		:update<CR>
+vnoremap <C-S>		<C-C>:update<CR>
+inoremap <C-S>		<C-O>:update<CR>
+
+" For CTRL-V to work autoselect must be off.
+" On Unix we have two selections, autoselect can be used.
+if !has("unix")
+  set guioptions-=a
+endif
+
+" CTRL-Z is Undo; not in cmdline though
+noremap <C-Z> u
+inoremap <C-Z> <C-O>u
+
+" CTRL-Y is Redo (although not repeat); not in cmdline though
+noremap <C-Y> <C-R>
+inoremap <C-Y> <C-O><C-R>
+
+" Alt-Space is System menu
+if has("gui")
+  noremap <M-Space> :simalt ~<CR>
+  inoremap <M-Space> <C-O>:simalt ~<CR>
+  cnoremap <M-Space> <C-C>:simalt ~<CR>
+endif
+
+" CTRL-A is Select all
+noremap <C-A> gggH<C-O>G
+inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+cnoremap <C-A> <C-C>gggH<C-O>G
+onoremap <C-A> <C-C>gggH<C-O>G
+snoremap <C-A> <C-C>gggH<C-O>G
+xnoremap <C-A> <C-C>ggVG
+
+" CTRL-Tab is Next window
+noremap <C-Tab> <C-W>w
+inoremap <C-Tab> <C-O><C-W>w
+cnoremap <C-Tab> <C-C><C-W>w
+onoremap <C-Tab> <C-C><C-W>w
+
+" CTRL-F4 is Close window
+noremap <C-F4> <C-W>c
+inoremap <C-F4> <C-O><C-W>c
+cnoremap <C-F4> <C-C><C-W>c
+onoremap <C-F4> <C-C><C-W>c
+
+"if has("gui")
+"  " CTRL-F is the search dialog
+"  noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>" : "/"
+"  inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>" : "\<C-\>\<C-O>/"
+"  cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>" : "\<C-\>\<C-O>/"
+"
+"  " CTRL-H is the replace dialog,
+"  " but in console, it might be backspace, so don't map it there
+"  nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
+"  inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
+"  cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
+"endif
+
+" restore 'cpoptions'
+set cpo&
+if 1
+  let &cpoptions = s:save_cpo
+  unlet s:save_cpo
+endif
+
 " }}}
 " {{{ Autocmd format
 augroup filetype_html
@@ -320,35 +475,35 @@ autocmd FileType html inoremap 'C Ç
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 augroup END
 
-augroup filetype_css
-autocmd!
+"augroup filetype_css
+"autocmd!
 " trie les tags css
-autocmd FileType css nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-augroup END
+"autocmd FileType css nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+"augroup END
 
-augroup filetype_python
-autocmd!
+"augroup filetype_python
+"autocmd!
 " active l'auto-complétion pour certain fichiers, à lancer avec CTRL-X O
 "python command - should be in another file.
 "$ ctags -R -f ~/.vim/tags/python.ctags /usr/lib/python2.5/
 " :autocmd BufWritePost * call system("ctags -R")
 "set tags+=$HOME/.vim/tags/python.ctags
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-autocmd FileType python match Excess /\%80v.%/
-augroup END
+"autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
+"autocmd FileType python match Excess /\%80v.%/
+"augroup END
 
-augroup filetype_php
+"augroup filetype_php
 " permet de rechercher un fichier tags en remontant du repertoire courant a la 
 " racine, jusqu'a ce qu'il soit trouve.
-set tags=tags;/
-augroup END
+"set tags=tags;/
+"augroup END
 
-augroup filetype_javascript
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-set suffixesadd+=.js
-augroup END
+"augroup filetype_javascript
+"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"set suffixesadd+=.js
+"augroup END
 
 "git syntax highlight
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
@@ -357,64 +512,9 @@ autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 augroup filetype_glsl
 autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl 
 augroup END
-" }}}
-" {{{ python mode configuration
-" Python-mode
-" Activate rope
-" Keys:
-" K             Show python docs
-" <Ctrl-Space>  Rope autocomplete
-" <Ctrl-c>g     Rope goto definition
-" <Ctrl-c>d     Rope show documentation
-" <Ctrl-c>f     Rope find occurrences
-" <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
-" [[            Jump on previous class or function (normal, visual, operator modes)
-" ]]            Jump on next class or function (normal, visual, operator modes)
-" [M            Jump on previous class or method (normal, visual, operator modes)
-" ]M            Jump on next class or method (normal, visual, operator modes)
-
-" evite l'utilisation de rope, utilisont plutot python-jedi pour la completion
-let g:pymode_rope = 0
-
-" Documentation
-let g:pymode_doc = 1
-let g:pymode_doc_key = 'K'
-
-"Linting
-let g:pymode_lint = 1
-let g:pymode_lint_checker = "pyflakes,pep8"
-" Auto check on save
-let g:pymode_lint_write = 1
-
-" Support virtualenv
-let g:pymode_virtualenv = 1
-
-" Enable breakpoints plugin
-let g:pymode_breakpoint = 1
-let g:pymode_breakpoint_key = '<leader>b'
-
-" syntax highlighting
-let g:pymode_syntax = 1
-let g:pymode_syntax_all = 1
-let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-" Don't autofold code
-let g:pymode_folding = 0
-
-
-" Add the virtualenv's site-packages to vim path
-py << EOF
-import os.path
-import sys
-import vim
-if 'VIRTUAL_ENV' in os.environ:
-    project_base_dir = os.environ['VIRTUAL_ENV']
-    sys.path.insert(0, project_base_dir)
-    activate_this = os.path.join(project_base_dir, 'bin/activate')
-    execfile(activate_this, dict(__file__=activate_this))
-EOF
-
+"autosave session
+autocmd VimLeave * call SaveSession()
+autocmd VimEnter * call RestoreSession()
 " }}}
 
 " see help modeline for explanation on the line below

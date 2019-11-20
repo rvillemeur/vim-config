@@ -1,33 +1,27 @@
 
-" démarre en plein écran
-" set lines=999
-" set columns=9999
+"démarre en plein écran
+set lines=999
+set columns=9999
 
 " mode de couleur
-"colorscheme desert
-let g:solarized_menu=0
+set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
+"solarized set up
+let g:solarized_contrast="high"
 set background=light
+let g:solarized_visibility="high"
+let g:solarized_menu=0
 colorscheme solarized
 
-"arrière plan
-"hi Normal guibg=LightYellow
-"hi Normal guibg=#FFFF7E
+"define font
+set guifont=Consolas:h12:cANSI
 
+" Make command line two lines high
+set ch=2		
 
-" Police de caractère pour Gvim qui supporte le symbole euro
-" if &term == "builtin_gui"
-    "set guifont=courier_new:h10:cANSI
-"else 
-"    set guifont=bitstream\ vera\ sans\ mono\ 9 
-"    set guifont=courier\ new\ 10 
-    set guifont=DejaVu\ Sans\ Mono\ 12
-"endif
-
-"on n'affiche pas la toolbar - faire :help guioptions pour plus de détails
-set guioptions=
+"faire :help guioptions pour plus de détails
+set guioptions=		"on réinitialise le menu
 set guioptions+=e   "add tab page
-set guioptions-=L
-set guioptions+=m   "no menu bar
+set guioptions+=m   "show menu bar
 set guioptions-=l   "no left scrollbar
 set guioptions-=L   "no left scrollbar
 set guioptions-=r   "no right scrollbar
@@ -36,3 +30,8 @@ set guioptions-=R   "no right scrollbar
 "activation par défaut au démarrage de la gestion de la souris
 set mouse+=v
 set nopaste
+
+" Switch on syntax highlighting if it wasn't on yet.
+if !exists("syntax_on")
+	syntax on
+endif
