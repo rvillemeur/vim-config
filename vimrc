@@ -19,37 +19,30 @@ set encoding=utf-8
 "    set shellcmdflag=-command
 "endif
 " }}} end windows set-up
-" {{{ VUNDLE set-up
-filetype off                   " required!
+" {{{ vim-plug set-up
+" source: https://github.com/junegunn/vim-plug
 if has('windows')
-    set runtimepath=$VIMRUNTIME
-    set runtimepath+=C:/devzone/vim/bundle
-    set runtimepath+=C:/devzone/vim/bundle/Vundle.vim/
-    call vundle#begin('C:\devzone\vim\bundle')
+    call plug#begin('C:\devzone\vim\plugged')
 else
-    set rtp+=~/.vim/bundle/Vundle.vim
-    call vundle#rc('~/.vim/bundle')
+    call plug#begin('~/.vim/plugged')
 endif
-" let Vundle manage Vundle - required! 
-Plugin 'VundleVim/Vundle.vim'
-
 " My Bundles here:
 " vim feature
-Plugin 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'
 "Plugin 'tpope/vim-obsession'
 "Plugin 'tpope/vim-fugitive'
 "Plugin 'gregsexton/gitv'
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 "Plugin 'tpope/vim-abolish'
 "Plugin 'kien/ctrlp.vim'
 "Plugin 'kshenoy/vim-signature'
 "Plugin 'fholgado/minibufexpl.vim'
-Plugin 'jlanzarotta/bufexplorer'
+Plug 'jlanzarotta/bufexplorer'
 if !has('win32') 
-	Plugin 'christoomey/vim-tmux-navigator'
+	Plug 'christoomey/vim-tmux-navigator'
 endif
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()            " required
 
 "automatic loading of plugin and indent rule, bases on file type
 filetype plugin on
