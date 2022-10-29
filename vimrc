@@ -1,4 +1,4 @@
-"note pour windows
+""note pour windows
 "ajouter la variable d'environnement MYVIMRC dans le profil utilisateur pour
 "choisir le fichier de démarrage spécifique.
 "MYVIMRC=%USERPROFILE%\Documents\perso\vim\_vimrc
@@ -8,7 +8,7 @@ set nocompatible
 
 "vim sera toujours en anglais
 set langmenu=en_US.UTF-8
-language US
+"language US
 " encodage par défaut
 set encoding=utf-8
 
@@ -21,36 +21,45 @@ set encoding=utf-8
 " }}} end windows set-up
 " {{{ vim-plug set-up
 " source: https://github.com/junegunn/vim-plug
-if has('windows')
-    call plug#begin('C:\devzone\vim\plugged')
-else
-    call plug#begin('~/.vim/plugged')
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
+call plug#begin('~/.vim/plugged')
 " My Bundles here:
 " vim feature
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+Plug 'chrisbra/unicode.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 "Plugin 'tpope/vim-obsession'
 "Plugin 'tpope/vim-fugitive'
 "Plugin 'gregsexton/gitv'
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
 "Plugin 'tpope/vim-abolish'
 "Plugin 'kien/ctrlp.vim'
 "Plugin 'kshenoy/vim-signature'
 "Plugin 'fholgado/minibufexpl.vim'
-Plug 'jlanzarotta/bufexplorer'
-if !has('win32') 
+"Plug 'jlanzarotta/bufexplorer'
+"if !has('win32') 
 	Plug 'christoomey/vim-tmux-navigator'
-endif
+"endif
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 
 "automatic loading of plugin and indent rule, bases on file type
 filetype plugin on
 filetype indent on
+
 " }}} end VUNDLE set-up
 " {{{ definition des options de vim
 " langue des documents
 set spelllang=fr_FR
+
+let g:airline_left_sep="\uE0B0"
+let g:airline_right_sep="\uE0B2"
+let g:airline_theme='solarized'
 
 " Minibuffer explorer configuration
 let g:miniBufExplVSplit = 25   " column width in chars
@@ -64,7 +73,7 @@ set paste
 set autochdir
 
 " ajout d'une ligne colorée pour surligner la ligne en cours
-" set cursorline
+set cursorline
 " Met en évidence la colonne après  'textwidth'
 set colorcolumn=+1
 
@@ -88,8 +97,8 @@ set startofline
 set wrap
 "set sidescroll=5
 " Largeur maxi du texte inséré
-"set textwidth=80
-set wrapmargin=80
+set textwidth=80
+"set wrapmargin=80
 set lbr
 set formatoptions=c "autowrap comment
 set formatoptions+=t "autowrap text enable
@@ -505,8 +514,8 @@ augroup filetype_glsl
 autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl 
 augroup END
 "autosave session
-autocmd VimLeave * call SaveSession()
-autocmd VimEnter * call RestoreSession()
+"autocmd VimLeave * call SaveSession()
+"autocmd VimEnter * call RestoreSession()
 " }}}
 
 " see help modeline for explanation on the line below
