@@ -33,13 +33,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'chrisbra/unicode.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plugin 'tpope/vim-obsession'
-"Plugin 'tpope/vim-fugitive'
-"Plugin 'gregsexton/gitv'
-"Plug 'scrooloose/nerdtree'
-"Plugin 'tpope/vim-abolish'
-"Plugin 'kien/ctrlp.vim'
-"Plugin 'kshenoy/vim-signature'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdtree'
+Plug 'kien/ctrlp.vim'
+Plug 'kshenoy/vim-signature'
+Plug 'dpelle/vim-languagetool'
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
+Plug 'tmux-plugins/vim-tmux'
 "Plugin 'fholgado/minibufexpl.vim'
 "Plug 'jlanzarotta/bufexplorer'
 "if !has('win32') 
@@ -60,6 +61,8 @@ set spelllang=fr_FR
 let g:airline_left_sep="\uE0B0"
 let g:airline_right_sep="\uE0B2"
 let g:airline_theme='solarized'
+let g:airline_solarized_bg='base_16'
+let airline_solarized_enable_command_color = 1
 
 " Minibuffer explorer configuration
 let g:miniBufExplVSplit = 25   " column width in chars
@@ -73,7 +76,7 @@ set paste
 set autochdir
 
 " ajout d'une ligne colorée pour surligner la ligne en cours
-set cursorline
+" set cursorline
 " Met en évidence la colonne après  'textwidth'
 set colorcolumn=+1
 
@@ -146,6 +149,12 @@ set tabstop=4
 set expandtab
 " indique le nombre d'espace utilisé lors de l'indentation automatique.
 set shiftwidth=4
+
+" conceal level - this allow for example, markdown to appear formatted without displaying formating markup (e.g. **bold** will be bold)
+set conceallevel=2
+
+"clipboard option
+set clipboard=unnamedplus
 
 " pas de backup
 set nobackup
@@ -282,11 +291,7 @@ nnoremap <BS> <C-T>
 " recharger le fichier $HOME/.vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " édite le fichier $HOME/.vimrc
-if has('win32')
-    noremap <leader>ev :vsplit c:\devzone\vim\vim-config\vimrc<cr>
-else
-   noremap <leader>ev :vsplit $MYVIMRC<cr>
-endif
+noremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " Déplacement dans le fichier
 nnoremap <up> <nop>
