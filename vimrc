@@ -35,7 +35,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree'
-Plug 'kien/ctrlp.vim'
+"Plug 'kien/ctrlp.vim'
 Plug 'kshenoy/vim-signature'
 Plug 'dpelle/vim-languagetool'
 Plug 'godlygeek/tabular'
@@ -55,14 +55,16 @@ filetype indent on
 
 " }}} end VUNDLE set-up
 " {{{ definition des options de vim
-" langue des documents
-set spelllang=fr_FR
-
 let g:airline_left_sep="\uE0B0"
 let g:airline_right_sep="\uE0B2"
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='base_16'
 let airline_solarized_enable_command_color = 1
+
+" language tool configuration and document language
+let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-6.0/languagetool-commandline.jar'
+"set spelllang=fr_FR
+set spelllang=en-US
 
 " Minibuffer explorer configuration
 let g:miniBufExplVSplit = 25   " column width in chars
