@@ -30,22 +30,25 @@ call plug#begin('~/.vim/plugged')
 " My Bundles here:
 " vim feature
 "Plug 'altercation/vim-colors-solarized'
-Plug 'chrisbra/unicode.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/nerdtree'
-"Plug 'kien/ctrlp.vim'
-Plug 'kshenoy/vim-signature'
-Plug 'dpelle/vim-languagetool'
-Plug 'godlygeek/tabular'
-Plug 'preservim/vim-markdown'
-Plug 'tmux-plugins/vim-tmux'
-"Plugin 'fholgado/minibufexpl.vim'
-"Plug 'jlanzarotta/bufexplorer'
+Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
+Plug 'vim-airline/vim-airline'  "powerline like style form vim status bar
+"Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'       "git plugin for vim
+Plug 'scrooloose/nerdtree'      "file system explorer
+Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
+Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
+Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
+Plug 'dpelle/vim-languagetool'  "integrates the LanguageTool grammar checker
+"Plug 'godlygeek/tabular'       "improve tabular alignement of data
+Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
+Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
+Plug 'mhinz/vim-startify'       "start screen for Vim
+"Plug 'gcmt/taboo.vim'          "help renaming vim tabs
+Plug 'jlanzarotta/bufexplorer'  "buffer explorer
 "if !has('win32') 
 	Plug 'christoomey/vim-tmux-navigator'
 "endif
+Plug 'ryanoasis/vim-devicons'
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 
@@ -57,19 +60,13 @@ filetype indent on
 " {{{ definition des options de vim
 let g:airline_left_sep="\uE0B0"
 let g:airline_right_sep="\uE0B2"
-let g:airline_theme='solarized'
-let g:airline_solarized_bg='base_16'
-let airline_solarized_enable_command_color = 1
+"let g:airline_theme='solarized'
+"let g:airline_solarized_bg='base_16'
+"let airline_solarized_enable_command_color = 1
 
 " language tool configuration and document language
-let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-6.0/languagetool-commandline.jar'
+let g:languagetool_lang='en-US'
 "set spelllang=fr_FR
-set spelllang=en-US
-
-" Minibuffer explorer configuration
-let g:miniBufExplVSplit = 25   " column width in chars
-let g:miniBufExplBRSplit = 0   " Put new window below
-let g:miniBufExplAutoStart = 1 " Autostart Mini buf explorer
 
 " controle mieux le copier/coller du systeme
 set paste
@@ -104,11 +101,12 @@ set wrap
 " Largeur maxi du texte inséré
 set textwidth=80
 "set wrapmargin=80
-set lbr
+"set lbr
 set formatoptions=c "autowrap comment
 set formatoptions+=t "autowrap text enable
 set formatoptions+=q "allow formatting of comments
-set formatoptions+=w 
+set formatoptions+=a "autoformatting of paragraph"
+set formatoptions+=n "recognize numbered list"
 
 " Affiche les commandes dans la barre de status
 set showcmd
@@ -284,6 +282,10 @@ nnoremap Q <nop>
 " Active NerdTree
 map <F2> :NERDTreeToggle<CR>
 
+" Active NerdTerm
+nmap <leader>tt <Plug>(NERDTermToggle)
+tmap <leader>tt <Plug>(NERDTermToggle)
+
 "définition des touches de navigation dans l'aide VIM
 " activer un lien en appuyant sur Return
 nnoremap <Return> <C-]>
@@ -330,11 +332,33 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
 " se déplacer plus facilement dans les fenêtres
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" terminal mode
+"tnoremap <C-h> <c-\><c-n><c-w>h
+tnoremap <C-h> <c-w><c-w>h
+tnoremap <C-j> <c-w><c-w>j
+tnoremap <C-k> <c-w><c-w>k
+tnoremap <C-l> <c-w><c-w>l
+" Insert mode:
+inoremap <C-h> <Esc><c-w>h
+inoremap <C-j> <Esc><c-w>j
+inoremap <C-k> <Esc><c-w>k
+inoremap <C-l> <Esc><c-w>l
+" Visual mode:
+vnoremap <C-h> <Esc><c-w>h
+vnoremap <C-j> <Esc><c-w>j
+vnoremap <C-k> <Esc><c-w>k
+vnoremap <C-l> <Esc><c-w>l
+" Normal mode:
+nnoremap <C-h> <c-w>h
+nnoremap <C-j> <c-w>j
+nnoremap <C-k> <c-w>k
+nnoremap <C-l> <c-w>l
 nnoremap <leader>w <C-w>v<C-w>l
+
+" terminal escape
+tnoremap <Esc> <C-\><C-n>
+tnoremap <M-[> <Esc>
+tnoremap <C-v><Esc> <Esc>
 
 " formatage de texte
 " retire les blancs en bout de ligne
@@ -402,8 +426,8 @@ if !has("unix")
 endif
 
 " CTRL-Z is Undo; not in cmdline though
-noremap <C-Z> u
-inoremap <C-Z> <C-O>u
+" noremap <C-Z> u
+" inoremap <C-Z> <C-O>u
 
 " CTRL-Y is Redo (although not repeat); not in cmdline though
 noremap <C-Y> <C-R>
@@ -524,6 +548,10 @@ augroup END
 "autocmd VimLeave * call SaveSession()
 "autocmd VimEnter * call RestoreSession()
 " }}}
+"{{{ groff utilities
+au BufWritePost,BufFilePost *.ms !groff -ms % -Tpdf > %:r.pdf
+au BufWritePost,BufFilePost *.me !tbl % | groff -me -Tpdf > %:r.pdf
 
+"}}}
 " see help modeline for explanation on the line below
 " vim: set foldmethod=marker foldmarker={{{,}}} foldlevel=0 :
