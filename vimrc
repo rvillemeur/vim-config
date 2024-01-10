@@ -32,14 +32,14 @@ call plug#begin('~/.vim/plugged')
 "Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
 Plug 'vim-airline/vim-airline'  "powerline like style form vim status bar
-"Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'       "git plugin for vim
 Plug 'scrooloose/nerdtree'      "file system explorer
 Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
 Plug 'dpelle/vim-languagetool'  "integrates the LanguageTool grammar checker
-"Plug 'godlygeek/tabular'       "improve tabular alignement of data
+Plug 'godlygeek/tabular'       "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
 Plug 'mhinz/vim-startify'       "start screen for Vim
@@ -60,9 +60,9 @@ filetype indent on
 " {{{ definition des options de vim
 let g:airline_left_sep="\uE0B0"
 let g:airline_right_sep="\uE0B2"
-"let g:airline_theme='solarized'
-"let g:airline_solarized_bg='base_16'
-"let airline_solarized_enable_command_color = 1
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='base_16'
+let airline_solarized_enable_command_color = 1
 
 " language tool configuration and document language
 let g:languagetool_lang='en-US'
@@ -153,11 +153,26 @@ set shiftwidth=4
 " conceal level - this allow for example, markdown to appear formatted without displaying formating markup (e.g. **bold** will be bold)
 set conceallevel=2
 
+" Tweaks for browsing
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_browse_split=4  "open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
 "clipboard option
 set clipboard=unnamedplus
 
 " pas de backup
 set nobackup
+
+" search down into subfolders
+" provide tab-completion for all file-related tasks
+set path+=**
+
+" display all matching files when we tab complete
+set wildmenu
 
 set ignorecase  " ignore la casse de caractére
 set smartcase   " Suit la casse du mot recherché
@@ -165,6 +180,9 @@ set gdefault    " Applique le flag de substitution g par defaut
 set incsearch   " met en valeur le motif de recherche
 set showmatch   " met en valeur le motif de recherche
 set hlsearch    " met en valeur le motif de recherche
+
+" configure the 'make' command to run rspec
+" set makeprg=bundle\ exec\ rspec\ -f\ QuickFixFormatter
 
 " }}}
 " {{{ Définition de la barre de status
@@ -472,6 +490,9 @@ onoremap <C-F4> <C-C><C-W>c
 "  inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
 "  cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
 "endif
+
+" read an empty HTML template and move cursor to title
+nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
 
 " restore 'cpoptions'
 set cpo&
