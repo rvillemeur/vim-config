@@ -29,7 +29,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " My Bundles here:
 " vim feature
-"Plug 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
 Plug 'vim-airline/vim-airline'  "powerline like style form vim status bar
 Plug 'vim-airline/vim-airline-themes'
@@ -71,7 +71,7 @@ let g:languagetool_lang='en-US'
 " controle mieux le copier/coller du systeme
 set paste
 
-" change window cwd par rapport au fichier
+"change window cwd par rapport au fichier
 set autochdir
 
 " ajout d'une ligne colorée pour surligner la ligne en cours
@@ -572,6 +572,7 @@ augroup END
 "{{{ groff utilities
 au BufWritePost,BufFilePost *.ms !groff -ms % -Tpdf > %:r.pdf
 au BufWritePost,BufFilePost *.me !tbl % | groff -me -Tpdf > %:r.pdf
+au BufWritePost,BufFilePost *.pic !groff -p % -Tpdf > %:r.pdf
 
 "}}}
 " see help modeline for explanation on the line below

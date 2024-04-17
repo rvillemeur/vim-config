@@ -12,8 +12,32 @@ let g:solarized_visibility="high"
 let g:solarized_menu=0
 colorscheme solarized
 
+set termguicolors
+let g:terminal_ansi_colors = [
+    \ '#1C1C1C',
+    \ '#AF5F5F',
+    \ '#5F875F',
+    \ '#87875F',
+    \ '#5F87AF',
+    \ '#5F5F87',
+    \ '#5F8787',
+    \ '#6C6C6C',
+    \ '#444444',
+    \ '#FF8700',
+    \ '#87AF87',
+    \ '#FFFFAF',
+    \ '#8FAFD7',
+    \ '#8787AF',
+    \ '#5FAFAF',
+    \ '#FFFFFF',
+    \ ]
+
+highlight Terminal guibg='#282828'
+highlight Terminal guifg='#ebdbb2'
+
 "define font
-set guifont=Consolas:h12:cANSI
+"set guifont=Consolas:h12:cANSI
+set guifont=CaskaydiaMono\ Nerd\ Font\ Mono\ 16
 
 " Make command line two lines high
 set ch=2		
