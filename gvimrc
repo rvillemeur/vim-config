@@ -13,27 +13,27 @@ let g:solarized_menu=0
 colorscheme solarized
 
 set termguicolors
+" source: https://en.wikipedia.org/wiki/Solarized#Colors
 let g:terminal_ansi_colors = [
-    \ '#1C1C1C',
-    \ '#AF5F5F',
-    \ '#5F875F',
-    \ '#87875F',
-    \ '#5F87AF',
-    \ '#5F5F87',
-    \ '#5F8787',
-    \ '#6C6C6C',
-    \ '#444444',
-    \ '#FF8700',
-    \ '#87AF87',
-    \ '#FFFFAF',
-    \ '#8FAFD7',
-    \ '#8787AF',
-    \ '#5FAFAF',
-    \ '#FFFFFF',
-    \ ]
+     \ '#1C1C1C',
+     \ '#262626',
+     \ '#4E4E4E',
+     \ '#585858',
+     \ '#808080',
+     \ '#8A8A8A',
+     \ '#D7D7D7',
+     \ '#ffffD7',
+     \ '#AF8700',
+     \ '#D75F00',
+     \ '#D70000',
+     \ '#AF005F',
+     \ '#5F5FAF',
+     \ '#0087FF',
+     \ '#00AFAF',
+     \ '#5F8700']
 
-highlight Terminal guibg='#282828'
-highlight Terminal guifg='#ebdbb2'
+"highlight Terminal guibg='#282828'
+"highlight Terminal guifg='#ebdbb2'
 
 "define font
 "set guifont=Consolas:h12:cANSI
