@@ -1,4 +1,4 @@
-""note pour windows
+"note pour windows
 "ajouter la variable d'environnement MYVIMRC dans le profil utilisateur pour
 "choisir le fichier de démarrage spécifique.
 "MYVIMRC=%USERPROFILE%\Documents\perso\vim\_vimrc
@@ -28,7 +28,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin('~/.vim/plugged')
 " My Bundles here:
-" vim feature
 Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
 Plug 'vim-airline/vim-airline'  "powerline like style form vim status bar
@@ -38,16 +37,16 @@ Plug 'scrooloose/nerdtree'      "file system explorer
 Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
-Plug 'dpelle/vim-languagetool'  "integrates the LanguageTool grammar checker
+"Plug 'dpelle/vim-languagetool'  "integrates the LanguageTool grammar checker
 Plug 'godlygeek/tabular'       "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
 Plug 'mhinz/vim-startify'       "start screen for Vim
-"Plug 'gcmt/taboo.vim'          "help renaming vim tabs
+Plug 'gcmt/taboo.vim'          "help renaming vim tabs
 Plug 'jlanzarotta/bufexplorer'  "buffer explorer
-"if !has('win32') 
-	Plug 'christoomey/vim-tmux-navigator'
-"endif
+if !has('win32')
+    Plug 'christoomey/vim-tmux-navigator'
+endif
 Plug 'ryanoasis/vim-devicons'
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -65,8 +64,8 @@ let g:airline_solarized_bg='base_16'
 let airline_solarized_enable_command_color = 1
 
 " language tool configuration and document language
-let g:languagetool_lang='en-US'
-"set spelllang=fr_FR
+"let g:languagetool_lang='en-US'
+set spelllang=fr_FR
 
 " controle mieux le copier/coller du systeme
 set paste
@@ -75,11 +74,11 @@ set paste
 set autochdir
 
 " ajout d'une ligne colorée pour surligner la ligne en cours
-" set cursorline
+set cursorline
 " Met en évidence la colonne après  'textwidth'
 set colorcolumn=+1
 
-set showcmd
+"set showcmd
 " Active la coloration syntaxique
 syntax on
 "see :help :syn-sync for this
@@ -97,15 +96,15 @@ set startofline
 
 "automatic wrap de texte
 set wrap
-"set sidescroll=5
+set sidescroll=5
 " Largeur maxi du texte inséré
 set textwidth=80
-"set wrapmargin=80
-"set lbr
+set wrapmargin=80
+set lbr
 set formatoptions=c "autowrap comment
 set formatoptions+=t "autowrap text enable
 set formatoptions+=q "allow formatting of comments
-set formatoptions+=a "autoformatting of paragraph"
+"set formatoptions+=a "autoformatting of paragraph"
 set formatoptions+=n "recognize numbered list"
 
 " Affiche les commandes dans la barre de status
@@ -142,7 +141,7 @@ set foldlevel=4
 set foldcolumn=3
 
 " encodage par défaut
-set encoding=utf-8
+"set encoding=utf-8
 " traitement des espaces et des tabulations:
 set tabstop=4
 "set softtabstop=4
@@ -185,10 +184,10 @@ set hlsearch    " met en valeur le motif de recherche
 " set makeprg=bundle\ exec\ rspec\ -f\ QuickFixFormatter
 
 " }}}
-" {{{ Définition de la barre de status
-" Affiche une barre de status en bas de l'écran
+"" {{{ Définition de la barre de status
+"" Affiche une barre de status en bas de l'écran
 set laststatus=2
-" Contenu de la barre de status
+"" Contenu de la barre de status
 set statusline=%F                       "full path to the file to the buffer
 set statusline+=%m                      "Mofified text flag
 set statusline+=%r                      "Readonly text flag
@@ -208,7 +207,7 @@ set statusline+=[COL=%03v]              "position in buffer
 "use to highlight the statusline, you can define from User1 to User9 color
 "for example, to use User 1, you include %1* in front of the value
 "like set statusline +=%1*%4v\ %*
-"hi User1 guifg=#eea040 "guibg=#222222
+hi User1 guifg=#eea040 "guibg=#222222
 " }}}
 " {{{ custom functions
 "fonction de nettoyage d'un fichier issu du monde dos:
@@ -230,60 +229,60 @@ function! s:DisplayStatus(msg)
 endfunction
 
 " Comparaison des modifications en cours par rapport à la dernière version enregistrée
-function! DiffWithFileFromDisk()
-  let filename = expand('%')
-  let diffname = filename . '.fileFromBuffer'
-  exec 'saveas! ' . diffname
-  diffthis
-  vsplit
-  exec 'edit ' .filename
-  diffthis
-endfunction
+"function! DiffWithFileFromDisk()
+"  let filename = expand('%')
+"  let diffname = filename . '.fileFromBuffer'
+"  exec 'saveas! ' . diffname
+"  diffthis
+"  vsplit
+"  exec 'edit ' .filename
+"  diffthis
+"endfunction
 
-function! SaveSession()
-    if has('win32')
-        execute 'mksession! c:\devzone\vim\session.vim'
-    else
-        execute 'call mkdir(%:p:h/.vim)'
-        execute 'mksession! %:p:h/.vim/session.vim'
-    endif
-endfunction
+"function! SaveSession()
+"    if has('win32')
+"        execute 'mksession! c:\devzone\vim\session.vim'
+"    else
+"        execute 'call mkdir(%:p:h/.vim)'
+"        execute 'mksession! %:p:h/.vim/session.vim'
+"    endif
+"endfunction
 
-function! RestoreSession()
-    if has('win32')
-        execute 'source c:\devzone\vim\session.vim'
-    else
-        execute 'so %:p:h/.vim/session.vim'
-    endif
-    if bufexists(1)
-        for l in range(1, bufnr('$'))
-            if bufwinnr(l) == -1
-                exec 'sbuffer ' . l
-            endif
-        endfor
-    endif
-endfunction
+"function! RestoreSession()
+"    if has('win32')
+"        execute 'source c:\devzone\vim\session.vim'
+"    else
+"        execute 'so %:p:h/.vim/session.vim'
+"    endif
+"    if bufexists(1)
+"        for l in range(1, bufnr('$'))
+"            if bufwinnr(l) == -1
+"                exec 'sbuffer ' . l
+"            endif
+"        endfor
+"    endif
+"endfunction
 
 
-function! SuperCleverTab()
-  "check if at beginning of line or after a space
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-      return "\<Tab>"
-  else
-      " do we have omni completion available
-      if &omnifunc != ''
-          "use omni-completion 1. priority
-          return "\<C-X>\<C-O>"
-      elseif &dictionary != ''
-          " no omni completion, try dictionary completion
-          return "\<C-x>\<C-K>"
-     else
-          "use omni completion or dictionary completion 
-          "use known-word completion
-           return "\<C-x>\<C-n>"
-     endif
-  endif
-endfunction
+"function! SuperCleverTab()
+"  "check if at beginning of line or after a space
+"  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"      return "\<Tab>"
+"  else
+"      " do we have omni completion available
+"      if &omnifunc != ''
+"          "use omni-completion 1. priority
+"          return "\<C-X>\<C-O>"
+"      elseif &dictionary != ''
+"          " no omni completion, try dictionary completion
+"          return "\<C-x>\<C-K>"
+"     else
+"          "use omni completion or dictionary completion 
+"          "use known-word completion
+"           return "\<C-x>\<C-n>"
+"     endif
+"  endif
+"endfunction
 " }}}
 " {{{ Définition des mappings
 " type de Mapping
@@ -294,7 +293,7 @@ endfunction
 let mapleader = ","
 let maplocalleader = "\\"
 
-" évite d'invoquer Ex 
+" évite d'invoquer Ex
 nnoremap Q <nop>
 
 " Active NerdTree
@@ -341,8 +340,8 @@ xnoremap & :&&<CR>
 " supprime la mise en valeur de la recherche
 nnoremap <leader><space> :nohlsearch<cr>
 " remappe la recherche de parenthèse par % vers tab
-" nnoremap <tab> %
-" vnoremap <tab> %
+nnoremap <tab> %
+vnoremap <tab> %
 
 " associe F1 à ESC, évite les erreurs
 inoremap <F1> <ESC>
@@ -351,7 +350,7 @@ vnoremap <F1> <ESC>
 
 " se déplacer plus facilement dans les fenêtres
 " terminal mode
-"tnoremap <C-h> <c-\><c-n><c-w>h
+tnoremap <C-h> <c-\><c-n><c-w>h
 tnoremap <C-h> <c-w><c-w>h
 tnoremap <C-j> <c-w><c-w>j
 tnoremap <C-k> <c-w><c-w>k
@@ -378,18 +377,17 @@ tnoremap <Esc> <C-\><C-n>
 tnoremap <M-[> <Esc>
 tnoremap <C-v><Esc> <Esc>
 
-" formatage de texte
-" retire les blancs en bout de ligne
+" formatage de texte retire les blancs en bout de ligne
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
 " bind function to the tab key
 "inoremap <C-Tab>=SuperCleverTab()
 
 " set the 'cpoptions' to its Vim default
-if 1	" only do this when compiled with expression evaluation
-  let s:save_cpo = &cpoptions
-endif
-set cpo&vim
+"if 1 " only do this when compiled with expression evaluation
+"  let s:save_cpo = &cpoptions
+"endif
+"set cpo&vim
 
 " Set options and add mapping such that Vim behaves a lot like MS-Windows
 " backspace and cursor keys wrap to previous/next line
@@ -398,60 +396,59 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 " backspace in Visual mode deletes selection
 vnoremap <BS> d
 
-if has("clipboard")
-    " CTRL-X and SHIFT-Del are Cut
-    vnoremap <C-X> "+x
-    vnoremap <S-Del> "+x
-
-    " CTRL-C and CTRL-Insert are Copy
-    vnoremap <C-C> "+y
-    vnoremap <C-Insert> "+y
-
-    " CTRL-V and SHIFT-Insert are Paste
-    map <C-V>		"+gP
-    map <S-Insert>		"+gP
-
-    cmap <C-V>		<C-R>+
-    cmap <S-Insert>		<C-R>+
-endif
+"if has("clipboard")
+"    " CTRL-X and SHIFT-Del are Cut
+"    vnoremap <C-X> "+x
+"    vnoremap <S-Del> "+x
+"
+"    " CTRL-C and CTRL-Insert are Copy
+"    vnoremap <C-C> "+y
+"    vnoremap <C-Insert> "+y
+"
+"    " CTRL-V and SHIFT-Insert are Paste
+"    map <C-V> "+gP
+"    map <S-Insert> "+gP
+"
+"    cmap <C-V> <C-R>+
+"    cmap <S-Insert> <C-R>+
+"endif
 
 " Pasting blockwise and linewise selections is not possible in Insert and
 " Visual mode without the +virtualedit feature.  They are pasted as if they
 " were characterwise instead.
 " Uses the paste.vim autoload script.
 " Use CTRL-G u to have CTRL-Z only undo the paste.
+"if 1
+"    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
+"    exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
+"endif
 
-if 1
-    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
-    exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
-endif
-
-imap <S-Insert>		<C-V>
-vmap <S-Insert>		<C-V>
+"imap <S-Insert> <C-V>
+"vmap <S-Insert> <C-V>
 
 " Use CTRL-Q to do what CTRL-V used to do
-noremap <C-Q>		<C-V>
+"noremap <C-Q> <C-V>
 
 " Use CTRL-S for saving, also in Insert mode
-noremap <C-S>		:update<CR>
-vnoremap <C-S>		<C-C>:update<CR>
-inoremap <C-S>		<C-O>:update<CR>
+"noremap <C-S> :update<CR>
+"vnoremap <C-S> <C-C>:update<CR>
+"inoremap <C-S> <C-O>:update<CR>
 
 " For CTRL-V to work autoselect must be off.
 " On Unix we have two selections, autoselect can be used.
-if !has("unix")
-  set guioptions-=a
-endif
+"if !has("unix")
+"  set guioptions-=a
+"endif
 
 " CTRL-Z is Undo; not in cmdline though
-" noremap <C-Z> u
-" inoremap <C-Z> <C-O>u
+noremap <C-Z> u
+inoremap <C-Z> <C-O>u
 
 " CTRL-Y is Redo (although not repeat); not in cmdline though
 noremap <C-Y> <C-R>
 inoremap <C-Y> <C-O><C-R>
 
-" Alt-Space is System menu
+"" Alt-Space is System menu
 if has("gui")
   noremap <M-Space> :simalt ~<CR>
   inoremap <M-Space> <C-O>:simalt ~<CR>
@@ -492,45 +489,45 @@ onoremap <C-F4> <C-C><C-W>c
 "endif
 
 " read an empty HTML template and move cursor to title
-nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
+"nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
 
 " restore 'cpoptions'
-set cpo&
-if 1
-  let &cpoptions = s:save_cpo
-  unlet s:save_cpo
-endif
+"set cpo&
+"if 1
+"  let &cpoptions = s:save_cpo
+"  unlet s:save_cpo
+"endif
 
 " }}}
 " {{{ Autocmd format
-augroup filetype_html
-autocmd!
-autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
-"fold tag in html
-autocmd FileType html nnoremap <leader>ft Vatzf
-"Mapping pour tapper du texte français sur un clavier EN-US
-autocmd FileType html inoremap `a à
-autocmd FileType html inoremap `A À
-autocmd FileType html inoremap ^a â
-autocmd FileType html inoremap ^A Â
-autocmd FileType html inoremap 'e é
-autocmd FileType html inoremap 'E É
-autocmd FileType html inoremap ^e ê
-autocmd FileType html inoremap ^E Ê
-autocmd FileType html inoremap `e è
-autocmd FileType html inoremap `E È
-autocmd FileType html inoremap ^i î
-autocmd FileType html inoremap "o ö
-autocmd FileType html inoremap `u ù
-autocmd FileType html inoremap `U Ù
-autocmd FileType html inoremap 'c ç
-autocmd FileType html inoremap 'C Ç
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-augroup END
+"augroup filetype_html
+"autocmd!
+"autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
+""fold tag in html
+"autocmd FileType html nnoremap <leader>ft Vatzf
+""Mapping pour tapper du texte français sur un clavier EN-US
+"autocmd FileType html inoremap `a à
+"autocmd FileType html inoremap `A À
+"autocmd FileType html inoremap ^a â
+"autocmd FileType html inoremap ^A Â
+"autocmd FileType html inoremap 'e é
+"autocmd FileType html inoremap 'E É
+"autocmd FileType html inoremap ^e ê
+"autocmd FileType html inoremap ^E Ê
+"autocmd FileType html inoremap `e è
+"autocmd FileType html inoremap `E È
+"autocmd FileType html inoremap ^i î
+"autocmd FileType html inoremap "o ö
+"autocmd FileType html inoremap `u ù
+"autocmd FileType html inoremap `U Ù
+"autocmd FileType html inoremap 'c ç
+"autocmd FileType html inoremap 'C Ç
+"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"augroup END
 
 "augroup filetype_css
 "autocmd!
-" trie les tags css
+"" trie les tags css
 "autocmd FileType css nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 "autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 "augroup END
@@ -562,9 +559,9 @@ augroup END
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
 "glsl syntax highlight
-augroup filetype_glsl
-autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl 
-augroup END
+"augroup filetype_glsl
+"autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl 
+"augroup END
 "autosave session
 "autocmd VimLeave * call SaveSession()
 "autocmd VimEnter * call RestoreSession()
