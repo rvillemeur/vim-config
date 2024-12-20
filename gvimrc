@@ -34,10 +34,10 @@ highlight Terminal guifg='#657B83'
 set guifont=CaskaydiaMono\ Nerd\ Font\ Mono\ 16
 
 " Make command line two lines high
-set ch=2		
+set ch=2
 
 "faire :help guioptions pour plus de détails
-set guioptions=		"on réinitialise le menu
+set guioptions=     "on réinitialise le menu
 set guioptions+=e   "add tab page
 set guioptions+=m   "show menu bar
 set guioptions-=l   "no left scrollbar
@@ -51,5 +51,5 @@ set nopaste
 
 " Switch on syntax highlighting if it wasn't on yet.
 if !exists("syntax_on")
-	syntax on
+    syntax on
 endif

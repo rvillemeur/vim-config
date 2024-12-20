@@ -1,15 +1,15 @@
 "note pour windows
 "ajouter la variable d'environnement MYVIMRC dans le profil utilisateur pour
-"choisir le fichier de dÈmarrage spÈcifique.
+"choisir le fichier de d√©marrage sp√©cifique.
 "MYVIMRC=%USERPROFILE%\Documents\perso\vim\_vimrc
 
-" Ne pas assurer la compatibilitÈ avec l'ancien Vi
+" Ne pas assurer la compatibilit√© avec l'ancien Vi
 set nocompatible
 
 "vim sera toujours en anglais
 set langmenu=en_US.UTF-8
 "language US
-" encodage par dÈfaut
+" encodage par d√©faut
 set encoding=utf-8
 
 
@@ -37,13 +37,14 @@ Plug 'scrooloose/nerdtree'      "file system explorer
 Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
-"Plug 'dpelle/vim-languagetool'  "integrates the LanguageTool grammar checker
-Plug 'godlygeek/tabular'       "improve tabular alignement of data
+"Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
+Plug 'godlygeek/tabular'        "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
 Plug 'mhinz/vim-startify'       "start screen for Vim
-Plug 'gcmt/taboo.vim'          "help renaming vim tabs
+Plug 'gcmt/taboo.vim'           "help renaming vim tabs
 Plug 'jlanzarotta/bufexplorer'  "buffer explorer
+Plug 'Aster89/WinZoZ'           "Better window management
 if !has('win32')
     Plug 'christoomey/vim-tmux-navigator'
 endif
@@ -73,9 +74,9 @@ set paste
 "change window cwd par rapport au fichier
 set autochdir
 
-" ajout d'une ligne colorÈe pour surligner la ligne en cours
+" ajout d'une ligne color√©e pour surligner la ligne en cours
 set cursorline
-" Met en Èvidence la colonne aprËs  'textwidth'
+" Met en √©vidence la colonne apr√®s  'textwidth'
 set colorcolumn=+1
 
 "set showcmd
@@ -85,10 +86,10 @@ syntax on
 syntax sync fromstart
 
 
-"affiche par dÈfaut les tabs de fenetre
+"affiche par d√©faut les tabs de fenetre
 set showtabline=2
 
-" ajout de la numÈrotation des lignes
+" ajout de la num√©rotation des lignes
 set number
 
 " garde la position du curseur entre buffer
@@ -97,7 +98,7 @@ set startofline
 "automatic wrap de texte
 set wrap
 set sidescroll=5
-" Largeur maxi du texte insÈrÈ
+" Largeur maxi du texte ins√©r√©
 set textwidth=80
 set wrapmargin=80
 set lbr
@@ -109,7 +110,7 @@ set formatoptions+=n "recognize numbered list"
 
 " Affiche les commandes dans la barre de status
 set showcmd
-" Affiche la paire de parenthËses
+" Affiche la paire de parenth√®ses
 set showmatch
 " Pas de beep intempestif, visual bell
 set vb
@@ -121,7 +122,7 @@ set lazyredraw
 
 " affiche les tabulation et les espaces de fin de ligne
 set list
-set listchars=tab:>-,trail:- ",eol:¨
+set listchars=tab:>-,trail:- ",eol:¬¨
 set listchars+=precedes:<,extends:>
 
 " pas de format de nombre pour ctrl-x ctrl-a
@@ -133,20 +134,28 @@ set backspace=indent,eol,start
 " Activation de la gestion des ouvertures/fermetures de folding
 set foldenable
 " Affichage d'une ligne de '=' sur les pliages
-set fillchars=fold:=
-" Le dÈcoupage des folders se base sur l'indentation
+set fillchars+=fold:=
+
+" change character for split window
+" the ‚îÇ character come from digraph table. 
+" to get it, <c-k>VV or <c-v> u 2503
+highlight VertSplit cterm=NONE
+set fillchars+=vert:‚îÉ
+"set fillchars+=vert:Óàè
+
+" Le d√©coupage des folders se base sur l'indentation
 "set foldmethod=indent
-" 4 niveaux d'indentation par dÈfaut pour les folders
+" 4 niveaux d'indentation par d√©faut pour les folders
 set foldlevel=4
 set foldcolumn=3
 
-" encodage par dÈfaut
+" encodage par d√©faut
 "set encoding=utf-8
 " traitement des espaces et des tabulations:
 set tabstop=4
-"set softtabstop=4
+set softtabstop=4
 set expandtab
-" indique le nombre d'espace utilisÈ lors de l'indentation automatique.
+" indique le nombre d'espace utilis√© lors de l'indentation automatique.
 set shiftwidth=4
 
 " conceal level - this allow for example, markdown to appear formatted without displaying formating markup (e.g. **bold** will be bold)
@@ -173,8 +182,8 @@ set path+=**
 " display all matching files when we tab complete
 set wildmenu
 
-set ignorecase  " ignore la casse de caractÈre
-set smartcase   " Suit la casse du mot recherchÈ
+set ignorecase  " ignore la casse de caract√©re
+set smartcase   " Suit la casse du mot recherch√©
 set gdefault    " Applique le flag de substitution g par defaut
 set incsearch   " met en valeur le motif de recherche
 set showmatch   " met en valeur le motif de recherche
@@ -184,8 +193,8 @@ set hlsearch    " met en valeur le motif de recherche
 " set makeprg=bundle\ exec\ rspec\ -f\ QuickFixFormatter
 
 " }}}
-"" {{{ DÈfinition de la barre de status
-"" Affiche une barre de status en bas de l'Ècran
+"" {{{ D√©finition de la barre de status
+"" Affiche une barre de status en bas de l'√©cran
 set laststatus=2
 "" Contenu de la barre de status
 set statusline=%F                       "full path to the file to the buffer
@@ -212,13 +221,13 @@ hi User1 guifg=#eea040 "guibg=#222222
 " {{{ custom functions
 "fonction de nettoyage d'un fichier issu du monde dos:
 " - remplacement des tabulations par des espaces
-" - suppression des caractËres ^M en fin de ligne
+" - suppression des caract√®res ^M en fin de ligne
 " le ^M est obtenu par la combinaison de touche Ctrl-V + return
 function! CleanDosCode()
   set fileformat=unix
   %retab
   %s///g
-  call s:DisplayStatus('fichier dos nettoyÈ')
+  call s:DisplayStatus('fichier dos nettoy√©')
 endfunction
 
 "fonction d'affichage d'un message en inverse video
@@ -228,7 +237,7 @@ function! s:DisplayStatus(msg)
   echohl None
 endfunction
 
-" Comparaison des modifications en cours par rapport ‡ la derniËre version enregistrÈe
+" Comparaison des modifications en cours par rapport √† la derni√®re version enregistr√©e
 "function! DiffWithFileFromDisk()
 "  let filename = expand('%')
 "  let diffname = filename . '.fileFromBuffer'
@@ -284,7 +293,7 @@ endfunction
 "  endif
 "endfunction
 " }}}
-" {{{ DÈfinition des mappings
+" {{{ D√©finition des mappings
 " type de Mapping
 " i[nsert]nore[cursion]map
 " n[ormal]nore[cursion]map
@@ -293,7 +302,7 @@ endfunction
 let mapleader = ","
 let maplocalleader = "\\"
 
-" Èvite d'invoquer Ex
+" √©vite d'invoquer Ex
 nnoremap Q <nop>
 
 " Active NerdTree
@@ -303,18 +312,18 @@ map <F2> :NERDTreeToggle<CR>
 nmap <leader>tt <Plug>(NERDTermToggle)
 tmap <leader>tt <Plug>(NERDTermToggle)
 
-"dÈfinition des touches de navigation dans l'aide VIM
+"d√©finition des touches de navigation dans l'aide VIM
 " activer un lien en appuyant sur Return
 nnoremap <Return> <C-]>
-" Revenir ‡ la page prÈcÈdente avec backspace
+" Revenir √† la page pr√©c√©dente avec backspace
 nnoremap <BS> <C-T>
 
 " recharger le fichier $HOME/.vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
-" Èdite le fichier $HOME/.vimrc
+" √©dite le fichier $HOME/.vimrc
 noremap <leader>ev :vsplit $MYVIMRC<cr>
 
-" DÈplacement dans le fichier
+" D√©placement dans le fichier
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -339,16 +348,16 @@ xnoremap & :&&<CR>
 
 " supprime la mise en valeur de la recherche
 nnoremap <leader><space> :nohlsearch<cr>
-" remappe la recherche de parenthËse par % vers tab
+" remappe la recherche de parenth√®se par % vers tab
 nnoremap <tab> %
 vnoremap <tab> %
 
-" associe F1 ‡ ESC, Èvite les erreurs
+" associe F1 √† ESC, √©vite les erreurs
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-" se dÈplacer plus facilement dans les fenÍtres
+" se d√©placer plus facilement dans les fen√™tres
 " terminal mode
 tnoremap <C-h> <c-\><c-n><c-w>h
 tnoremap <C-h> <c-w><c-w>h
@@ -505,23 +514,23 @@ onoremap <C-F4> <C-C><C-W>c
 "autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
 ""fold tag in html
 "autocmd FileType html nnoremap <leader>ft Vatzf
-""Mapping pour tapper du texte franÁais sur un clavier EN-US
-"autocmd FileType html inoremap `a ‡
-"autocmd FileType html inoremap `A ¿
-"autocmd FileType html inoremap ^a ‚
-"autocmd FileType html inoremap ^A ¬
-"autocmd FileType html inoremap 'e È
-"autocmd FileType html inoremap 'E …
-"autocmd FileType html inoremap ^e Í
-"autocmd FileType html inoremap ^E  
-"autocmd FileType html inoremap `e Ë
-"autocmd FileType html inoremap `E »
-"autocmd FileType html inoremap ^i Ó
-"autocmd FileType html inoremap "o ˆ
-"autocmd FileType html inoremap `u ˘
-"autocmd FileType html inoremap `U Ÿ
-"autocmd FileType html inoremap 'c Á
-"autocmd FileType html inoremap 'C «
+""Mapping pour tapper du texte fran√ßais sur un clavier EN-US
+"autocmd FileType html inoremap `a √†
+"autocmd FileType html inoremap `A √Ä
+"autocmd FileType html inoremap ^a √¢
+"autocmd FileType html inoremap ^A √Ç
+"autocmd FileType html inoremap 'e √©
+"autocmd FileType html inoremap 'E √â
+"autocmd FileType html inoremap ^e √™
+"autocmd FileType html inoremap ^E √ä
+"autocmd FileType html inoremap `e √®
+"autocmd FileType html inoremap `E √à
+"autocmd FileType html inoremap ^i √Æ
+"autocmd FileType html inoremap "o √∂
+"autocmd FileType html inoremap `u √π
+"autocmd FileType html inoremap `U √ô
+"autocmd FileType html inoremap 'c √ß
+"autocmd FileType html inoremap 'C √á
 "autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 "augroup END
 
@@ -534,7 +543,7 @@ onoremap <C-F4> <C-C><C-W>c
 
 "augroup filetype_python
 "autocmd!
-" active l'auto-complÈtion pour certain fichiers, ‡ lancer avec CTRL-X O
+" active l'auto-compl√©tion pour certain fichiers, √† lancer avec CTRL-X O
 "python command - should be in another file.
 "$ ctags -R -f ~/.vim/tags/python.ctags /usr/lib/python2.5/
 " :autocmd BufWritePost * call system("ctags -R")
