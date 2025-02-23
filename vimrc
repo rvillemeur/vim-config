@@ -12,6 +12,11 @@ set langmenu=en_US.UTF-8
 " encodage par défaut
 set encoding=utf-8
 
+" Background colors for active vs inactive windows.
+" Color is set in WindowManagement augroup
+hi NormalNC ctermbg=255
+
+
 
 " {{{ windows set-up 
 "if has("windows")
@@ -166,8 +171,8 @@ let g:netrw_banner=0        " disable annoying banner
 let g:netrw_browse_split=4  "open in prior window
 let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
-let g:netrw_list_hide=netrw_gitignore#Hide()
-let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+"let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide=',\(^\|\s\s\)\zs\.\S\+'
 
 "clipboard option
 set clipboard=unnamedplus
@@ -236,6 +241,15 @@ function! s:DisplayStatus(msg)
   echo a:msg
   echohl None
 endfunction
+
+"showing highlight group
+nmap <leader>sp :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 
 " Comparaison des modifications en cours par rapport à la dernière version enregistrée
 "function! DiffWithFileFromDisk()
@@ -533,6 +547,13 @@ onoremap <C-F4> <C-C><C-W>c
 "autocmd FileType html inoremap 'C Ç
 "autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 "augroup END
+
+" Call method on window enter
+augroup WindowManagement
+  autocmd!
+  autocmd WinEnter * setl wincolor=Normal
+  autocmd WinLeave * setl wincolor=NormalNC
+augroup END
 
 "augroup filetype_css
 "autocmd!
