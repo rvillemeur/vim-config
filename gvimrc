@@ -1,6 +1,6 @@
 "démarre en plein écran
-set lines=999
-set columns=9999
+"set lines=999
+"set columns=9999
 
 " mode de couleur
 set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
@@ -31,7 +31,7 @@ highlight Terminal guifg='#657B83'
 
 "define font
 "set guifont=Consolas:h12:cANSI
-set guifont=CaskaydiaMono\ Nerd\ Font\ Mono\ 16
+set guifont=CaskaydiaMono\ Nerd\ Font\ Mono\ 12
 
 " Make command line two lines high
 set ch=2
