@@ -42,7 +42,7 @@ Plug 'scrooloose/nerdtree'      "file system explorer
 Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
-"Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
+Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
 Plug 'godlygeek/tabular'        "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
@@ -63,15 +63,17 @@ filetype indent on
 
 " }}} end VUNDLE set-up
 " {{{ definition des options de vim
-let g:airline_left_sep="\uE0B0"
-let g:airline_right_sep="\uE0B2"
+let g:airline_left_sep='' "\uE0B0
+let g:airline_right_sep='' "\uE0B2
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='base_16'
 let airline_solarized_enable_command_color = 1
 
 " language tool configuration and document language
 "let g:languagetool_lang='en-US'
-set spelllang=fr_FR
+"let g:languagetool_lang=fr
+let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar'
+set spelllang=fr
 
 " controle mieux le copier/coller du systeme
 set paste
@@ -154,8 +156,6 @@ set fillchars+=vert:┃
 set foldlevel=4
 set foldcolumn=3
 
-" encodage par défaut
-"set encoding=utf-8
 " traitement des espaces et des tabulations:
 set tabstop=4
 set softtabstop=4
@@ -163,8 +163,12 @@ set expandtab
 " indique le nombre d'espace utilisé lors de l'indentation automatique.
 set shiftwidth=4
 
+" markdown option
 " conceal level - this allow for example, markdown to appear formatted without displaying formating markup (e.g. **bold** will be bold)
 set conceallevel=2
+let g:markdown_fenced_languages = ['st=smalltalk', 'js=javascript']
+let g:vim_markdown_emphasis_multiline = 0
+
 
 " Tweaks for browsing
 let g:netrw_banner=0        " disable annoying banner
