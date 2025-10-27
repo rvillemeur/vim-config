@@ -1,4 +1,5 @@
 "note pour windows
+
 "ajouter la variable d'environnement MYVIMRC dans le profil utilisateur pour
 "choisir le fichier de démarrage spécifique.
 "MYVIMRC=%USERPROFILE%\Documents\perso\vim\_vimrc
@@ -35,6 +36,8 @@ call plug#begin('~/.vim/plugged')
 " My Bundles here:
 Plug 'altercation/vim-colors-solarized'
 Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
+"Plug 'kyuhi/vim-emoji-complete' "insert emoji
+Plug 'junegunn/vim-emoji'       "insert emoji 2
 Plug 'vim-airline/vim-airline'  "powerline like style form vim status bar
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'       "git plugin for vim
@@ -52,10 +55,13 @@ Plug 'jlanzarotta/bufexplorer'  "buffer explorer
 Plug 'Aster89/WinZoZ'           "Better window management
 Plug 'junegunn/goyo.vim'        "distraction free vim
 Plug 'junegunn/limelight.vim'   "distraction free vim, complement of goyo
+Plug 'junegunn/vim-peekaboo'    "Display content of register dynamically
 if !has('win32')
     Plug 'christoomey/vim-tmux-navigator'
 endif
 Plug 'ryanoasis/vim-devicons'
+Plug 'mhinz/vim-signify'        "show difference in git 
+Plug 'adelarsq/vim-emoji-icon-theme' "another emoji, test from devicons
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 
@@ -71,11 +77,19 @@ let g:airline_theme='solarized'
 let g:airline_solarized_bg='base_16'
 let airline_solarized_enable_command_color = 1
 
+set completefunc=emoji#complete
+
 " language tool configuration and document language
 "let g:languagetool_lang='en-US'
 "let g:languagetool_lang=fr
 let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar'
 set spelllang=fr
+
+"mouse scrolling
+set mouse=a
+
+"Limelight foreground - needed on terminal
+let g:limelight_conceal_ctermfg='gray'
 
 " controle mieux le copier/coller du systeme
 set paste
@@ -366,6 +380,18 @@ nnoremap <BS> <C-T>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " édite le fichier $HOME/.vimrc
 noremap <leader>ev :vsplit $MYVIMRC<cr>
+
+"mapping pour emoji
+nnoremap <c-e> <nop>
+cnoremap <c-e> <nop>
+vnoremap <c-e> <nop>
+inoremap <ScrollWheelUp> <Nop>
+inoremap <c-x><c-e> <nop>
+inoremap <ScrollWheelDown> <Nop> 
+
+"emoji complete configuration
+let g:emoji_complete_overwrite_standard_keymaps = 0
+imap <c-x><c-E> <Plug>(emoji-start-complete)
 
 " Déplacement dans le fichier
 nnoremap <up> <nop>

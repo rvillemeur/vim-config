@@ -39,7 +39,7 @@ set ch=2
 "faire :help guioptions pour plus de détails
 set guioptions=     "on réinitialise le menu
 set guioptions+=e   "add tab page
-set guioptions+=m   "show menu bar
+set guioptions-=m   "show menu bar
 set guioptions-=l   "no left scrollbar
 set guioptions-=L   "no left scrollbar
 set guioptions-=r   "no right scrollbar
