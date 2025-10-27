@@ -611,6 +611,12 @@ augroup WindowManagement
   autocmd WinLeave * setl wincolor=NormalNC
 augroup END
 
+" Always open help vertically in the far right window
+augroup vimrc_help
+  autocmd!
+  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | :vert resize 90 | endif
+augroup END
+
 "augroup filetype_css
 "autocmd!
 "" trie les tags css
