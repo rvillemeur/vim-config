@@ -15,7 +15,8 @@ set encoding=utf-8
 
 " Background colors for active vs inactive windows.
 " Color is set in WindowManagement augroup
-hi NormalNC ctermbg=255
+" to get the color, look at the script '256-colors.sh' in bash config
+hi NormalNC ctermbg=237
 
 
 
@@ -46,6 +47,7 @@ Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
 Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
+Plug 'dpelle/vim-Grammalecte'       "French grammar checking
 Plug 'godlygeek/tabular'        "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
@@ -84,6 +86,10 @@ set completefunc=emoji#complete
 "let g:languagetool_lang=fr
 let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar'
 set spelllang=fr
+
+
+let g:grammalecte_cli_py='/usr/bin/grammalecte-cli.py'
+
 
 "mouse scrolling
 set mouse=a
@@ -640,6 +646,12 @@ augroup END
 "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 "set suffixesadd+=.js
 "augroup END
+
+"open vim help in a vertical window
+augroup vimrc_help
+  autocmd!
+  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
+augroup END
 
 "git syntax highlight
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
