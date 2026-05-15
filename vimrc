@@ -7,19 +7,6 @@
 " Ne pas assurer la compatibilité avec l'ancien Vi
 set nocompatible
 
-"vim sera toujours en anglais
-set langmenu=en_US.UTF-8
-"language US
-" encodage par défaut
-set encoding=utf-8
-
-" Background colors for active vs inactive windows.
-" Color is set in WindowManagement augroup
-" to get the color, look at the script '256-colors.sh' in bash config
-hi NormalNC ctermbg=237
-
-
-
 " {{{ windows set-up 
 "if has("windows")
 "    set shell=powershell
@@ -35,7 +22,10 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin('~/.vim/plugged')
 " My Bundles here:
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+" Plus 'preservim/vim-color-pencil'
+Plug 'preservim/vim-pencil'
 Plug 'chrisbra/unicode.vim'     "deal with unicode caracters
 "Plug 'kyuhi/vim-emoji-complete' "insert emoji
 Plug 'junegunn/vim-emoji'       "insert emoji 2
@@ -44,26 +34,34 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'       "git plugin for vim
 Plug 'scrooloose/nerdtree'      "file system explorer
 Plug 'wuelnerdotexe/nerdterm'   "toggle terminal
+" Plug 'leafOfTree/vim-project'
 Plug 'ctrlpvim/ctrlp.vim'       "Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'kshenoy/vim-signature'    "place, toggle and display marks.
 Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
 Plug 'dpelle/vim-Grammalecte'       "French grammar checking
 Plug 'godlygeek/tabular'        "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'rishi-opensource/vim-claude-code' "intégration de claude code
+Plug 'prabirshrestha/vim-lsp'   "intégration de serveur LSP
+Plug 'mattn/vim-lsp-settings'   "aide pour paramétrer le serveur LSP
+Plug 'prabirshrestha/asyncomplete-lsp.vim' "autocomplete with LSP
+"Plug 'vimwiki/vimwiki'
+"Plug 'fholgado/minibufexpl.vim'
 Plug 'tmux-plugins/vim-tmux'    "Vim plugin for editing .tmux.conf
 Plug 'mhinz/vim-startify'       "start screen for Vim
 Plug 'gcmt/taboo.vim'           "help renaming vim tabs
 Plug 'jlanzarotta/bufexplorer'  "buffer explorer
-Plug 'Aster89/WinZoZ'           "Better window management
 Plug 'junegunn/goyo.vim'        "distraction free vim
 Plug 'junegunn/limelight.vim'   "distraction free vim, complement of goyo
 Plug 'junegunn/vim-peekaboo'    "Display content of register dynamically
 if !has('win32')
     Plug 'christoomey/vim-tmux-navigator'
 endif
-Plug 'ryanoasis/vim-devicons'
 Plug 'mhinz/vim-signify'        "show difference in git 
 Plug 'adelarsq/vim-emoji-icon-theme' "another emoji, test from devicons
+Plug 'lambdalisue/vim-glyph-palette' "apply color on Nerd Fongts
+Plug 'ryanoasis/vim-devicons'   "must be last to load
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 
@@ -72,7 +70,7 @@ filetype plugin on
 filetype indent on
 
 " }}} end VUNDLE set-up
-" {{{ definition des options de vim
+" {{{ definition des options des plugins de vim
 let g:airline_left_sep='' "\uE0B0
 let g:airline_right_sep='' "\uE0B2
 let g:airline_theme='solarized'
@@ -81,34 +79,89 @@ let airline_solarized_enable_command_color = 1
 
 set completefunc=emoji#complete
 
+" vim lsp server
+" include also a custom function and augroup
+if executable('pylsp')
+    " pip install python-lsp-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
 " language tool configuration and document language
 "let g:languagetool_lang='en-US'
 "let g:languagetool_lang=fr
 let g:languagetool_jar='$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar'
-set spelllang=fr
-
-
 let g:grammalecte_cli_py='/usr/bin/grammalecte-cli.py'
 
+" pencil otpion, like gutter color
+let g:pencil_gutter_color = 1
+let g:pencil#textwidth = 80
+let g:airline_section_x = '%{PencilMode()}'
+let g:pencil#wrapModelDefault = 'soft' "Default is 'hard'
 
-"mouse scrolling
-set mouse=a
+"let g:vim_markdown_conceal_code_blocks = 0
+let vim_markdown_fenced_languages = ['smalltalk=st']
+let vim_markdown_folding_style_pythonic = 1
+let vim_markdown_folding_level = 1
+let vim_markdown_toc_autofit = 1
+let vim_markdown_strikethrough = 1
+let vim_markdown_edit_url_in = 'vsplit'
+
+"Tweaks for browsing
+let g:netrw_banner = 0 "disable annoying banner
+let g:netrw_browse_split = 4 "open in prior window
+let g:netrw_altv = 1        "open splits on the right
+let g:netrw_liststyle = 3   "tree view
+"let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide=',\(^\|\s\s\)\zs\.\S\+'
+" }}} end  définitions des options des plugins de vim
+" {{{ definition des options de vim
+
+"vim sera toujours en anglais
+set langmenu=en_US.UTF-8
+"language US
+" encodage par défaut
+set encoding=utf-8
+
+"langue par défaut pour correction orthographique
+set spelllang=fr
+
+" set autowrite when switching to another buffer
+set autowrite
+
+" session management option
+set sessionoptions=blank,buffers,tabpages
+
+"use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" Background colors for active vs inactive windows.
+" Color is set in WindowManagement augroup
+" to get the color, look at the script '256-colors.sh' in bash config
+hi NormalNC ctermbg=237
 
 "Limelight foreground - needed on terminal
 let g:limelight_conceal_ctermfg='gray'
-
-" controle mieux le copier/coller du systeme
-set paste
 
 "change window cwd par rapport au fichier
 set autochdir
 
 " ajout d'une ligne colorée pour surligner la ligne en cours
-set cursorline
+"set cursorline
+
 " Met en évidence la colonne après  'textwidth'
 set colorcolumn=+1
+hi ColorColumn ctermbg=red guibg=#600000
 
-"set showcmd
+"disable mouse0
+set mouse=c
+"set ttymouse=c
+
+"show (partial) command line the last line of the screen
+set showcmd
+
 " Active la coloration syntaxique
 syntax on
 "see :help :syn-sync for this
@@ -116,7 +169,7 @@ syntax sync fromstart
 
 
 "affiche par défaut les tabs de fenetre
-set showtabline=2
+"set showtabline=2
 
 " ajout de la numérotation des lignes
 set number
@@ -129,23 +182,23 @@ set wrap
 set sidescroll=5
 " Largeur maxi du texte inséré
 set textwidth=80
-set wrapmargin=80
-set lbr
-set formatoptions=c "autowrap comment
-set formatoptions+=t "autowrap text enable
-set formatoptions+=q "allow formatting of comments
+"set wrapmargin=80
+"set lbr
+"set formatoptions=c "autowrap comment
+"set formatoptions+=t "autowrap text enable
+"set formatoptions+=q "allow formatting of comments
 "set formatoptions+=a "autoformatting of paragraph"
 set formatoptions+=n "recognize numbered list"
 
-" Affiche les commandes dans la barre de status
-set showcmd
-" Affiche la paire de parenthèses
-set showmatch
+"Auto indent
+set ai
+
+"smart indent
+set si
+
 " Pas de beep intempestif, visual bell
 set vb
 
-" visual autocomplete for command menu
-set wildmenu
 " redraw only when we need to.
 set lazyredraw
 
@@ -158,12 +211,17 @@ set listchars+=precedes:<,extends:>
 set nrformats=
 
 "backspace permet de revenir en arriere tout le temps
-set backspace=indent,eol,start
+set backspace=indent,eol,start whichwrap+=<,>,[,]
 
 " Activation de la gestion des ouvertures/fermetures de folding
 set foldenable
 " Affichage d'une ligne de '=' sur les pliages
-set fillchars+=fold:=
+set fillchars+=fold:=,foldopen:▼,foldclose:▶,foldsep:┃
+" Le découpage des folders se base sur l'indentation
+"set foldmethod=indent
+" 4 niveaux d'indentation par défaut pour les folders
+set foldlevel=4
+set foldcolumn=5
 
 " change character for split window
 " the │ character come from digraph table. 
@@ -172,12 +230,6 @@ highlight VertSplit cterm=NONE
 set fillchars+=vert:┃
 "set fillchars+=vert:
 
-" Le découpage des folders se base sur l'indentation
-"set foldmethod=indent
-" 4 niveaux d'indentation par défaut pour les folders
-set foldlevel=4
-set foldcolumn=3
-
 " traitement des espaces et des tabulations:
 set tabstop=4
 set softtabstop=4
@@ -185,20 +237,18 @@ set expandtab
 " indique le nombre d'espace utilisé lors de l'indentation automatique.
 set shiftwidth=4
 
-" markdown option
-" conceal level - this allow for example, markdown to appear formatted without displaying formating markup (e.g. **bold** will be bold)
-set conceallevel=2
-let g:markdown_fenced_languages = ['st=smalltalk', 'js=javascript']
-let g:vim_markdown_emphasis_multiline = 0
+"be smart when usin tabs
+set smarttab
 
+"conceal level (for ex, to allow markdown without formatting markup
+set concealcursor=nc
 
-" Tweaks for browsing
-let g:netrw_banner=0        " disable annoying banner
-let g:netrw_browse_split=4  "open in prior window
-let g:netrw_altv=1          " open splits to the right
-let g:netrw_liststyle=3     " tree view
-"let g:netrw_list_hide=netrw_gitignore#Hide()
-let g:netrw_list_hide=',\(^\|\s\s\)\zs\.\S\+'
+"pas de fichier de swap
+set nowb
+set noswapfile
+
+"set how many lines of history VIM has to remember
+set history=500
 
 "clipboard option
 set clipboard=unnamedplus
@@ -210,8 +260,17 @@ set nobackup
 " provide tab-completion for all file-related tasks
 set path+=**
 
+"set to auto read when a file is changed from the outside
+set autoread
+
 " display all matching files when we tab complete
 set wildmenu
+
+"always show ruler
+set ruler
+
+" height of the command bar
+set cmdheight=1
 
 set ignorecase  " ignore la casse de caractére
 set smartcase   " Suit la casse du mot recherché
@@ -220,29 +279,38 @@ set incsearch   " met en valeur le motif de recherche
 set showmatch   " met en valeur le motif de recherche
 set hlsearch    " met en valeur le motif de recherche
 
+" for regular expressions turn magic on
+set magic
+
+" set regular expressions engine automatically
+set regexpengine=0
+
+"how many tenths of a second to blink when matching bracket
+set mat=2
+
 " configure the 'make' command to run rspec
 " set makeprg=bundle\ exec\ rspec\ -f\ QuickFixFormatter
 
 " }}}
 "" {{{ Définition de la barre de status
 "" Affiche une barre de status en bas de l'écran
-set laststatus=2
+"set laststatus=2
 "" Contenu de la barre de status
-set statusline=%F                       "full path to the file to the buffer
-set statusline+=%m                      "Mofified text flag
-set statusline+=%r                      "Readonly text flag
-set statusline+=%h                      "Help buffer flog
-set statusline+=%w\                     "Preview window flag
+"set statusline=%F                       "full path to the file to the buffer
+"set statusline+=%m                      "Mofified text flag
+"set statusline+=%r                      "Readonly text flag
+"set statusline+=%h                      "Help buffer flog
+"set statusline+=%w\                     "Preview window flag
 "set statusline+=[WRAP=%{&formatoptions}]\ 
-set statusline+=[FORMAT=%{&fileformat}] "file format
-set statusline+=[ENCODING=%{&encoding}] "file encoding
-set statusline+=[TYPE=%Y]\              "file type
-set statusline+=[REG=%{v:register}]     "register used
+"set statusline+=[FORMAT=%{&fileformat}] "file format
+"set statusline+=[ENCODING=%{&encoding}] "file encoding
+"set statusline+=[TYPE=%Y]\              "file type
+"set statusline+=[REG=%{v:register}]     "register used
 "set statusline+=[ASCII=\%03.3b]\       "ascii code
 "set statusline+=[HEX=\%02.2B]\         "hex code
-set statusline+=%=[POS=%04l%*/%04L]     "Number of line in buffer
-set statusline+=[%02p%%]                "percentage through the file
-set statusline+=[COL=%03v]              "position in buffer
+"set statusline+=%=[POS=%04l%*/%04L]     "Number of line in buffer
+"set statusline+=[%02p%%]                "percentage through the file
+"set statusline+=[COL=%03v]              "position in buffer
 
 "use to highlight the statusline, you can define from User1 to User9 color
 "for example, to use User 1, you include %1* in front of the value
@@ -356,6 +424,29 @@ function! s:goyo_leave()
   " ...
 endfunction
 
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
 " }}}
 " {{{ Définition des mappings
 " type de Mapping
@@ -436,15 +527,10 @@ vnoremap <F1> <ESC>
 " se déplacer plus facilement dans les fenêtres
 " terminal mode
 tnoremap <C-h> <c-\><c-n><c-w>h
-tnoremap <C-h> <c-w><c-w>h
+"tnoremap <C-h> <c-w><c-w>h
 tnoremap <C-j> <c-w><c-w>j
 tnoremap <C-k> <c-w><c-w>k
 tnoremap <C-l> <c-w><c-w>l
-" Insert mode:
-inoremap <C-h> <Esc><c-w>h
-inoremap <C-j> <Esc><c-w>j
-inoremap <C-k> <Esc><c-w>k
-inoremap <C-l> <Esc><c-w>l
 " Visual mode:
 vnoremap <C-h> <Esc><c-w>h
 vnoremap <C-j> <Esc><c-w>j
@@ -473,10 +559,6 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 "  let s:save_cpo = &cpoptions
 "endif
 "set cpo&vim
-
-" Set options and add mapping such that Vim behaves a lot like MS-Windows
-" backspace and cursor keys wrap to previous/next line
-set backspace=indent,eol,start whichwrap+=<,>,[,]
 
 " backspace in Visual mode deletes selection
 vnoremap <BS> d
@@ -653,17 +735,18 @@ augroup END
 "set suffixesadd+=.js
 "augroup END
 
-"open vim help in a vertical window
-augroup vimrc_help
-  autocmd!
-  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
-augroup END
-
 "git syntax highlight
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" lsp server 
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 "glsl syntax highlight
 "augroup filetype_glsl
 "autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl 
@@ -673,9 +756,12 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 "autocmd VimEnter * call RestoreSession()
 " }}}
 "{{{ groff utilities
-au BufWritePost,BufFilePost *.ms !groff -ms % -Tpdf > %:r.pdf
-au BufWritePost,BufFilePost *.me !tbl % | groff -me -Tpdf > %:r.pdf
-au BufWritePost,BufFilePost *.pic !groff -p % -Tpdf > %:r.pdf
+augroup groff_compile
+    autocmd!
+    au BufWritePost,BufFilePost *.ms !groff -ms % -Tpdf > %:r.pdf
+    au BufWritePost,BufFilePost *.me !tbl % | groff -me -Tpdf > %:r.pdf
+    au BufWritePost,BufFilePost *.pic !groff -p % -Tpdf > %:r.pdf
+augroup END
 
 "}}}
 " see help modeline for explanation on the line below
