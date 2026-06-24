@@ -41,6 +41,7 @@ Plug 'dpelle/vim-languagetool' "integrates the LanguageTool grammar checker
 Plug 'dpelle/vim-Grammalecte'       "French grammar checking
 Plug 'godlygeek/tabular'        "improve tabular alignement of data
 Plug 'preservim/vim-markdown'   "Syntax highlighting, matching rules and mappings
+Plug 'elzr/vim-json'            "JSON helper
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'rishi-opensource/vim-claude-code' "intégration de claude code
 Plug 'prabirshrestha/vim-lsp'   "intégration de serveur LSP
