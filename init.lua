@@ -13,107 +13,16 @@
 -- {{{ leader keys (must be set before plugins load)
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
+require("config.lazy")
+
 -- }}}
 -- {{{  disable netrw at the very start of your init.lua (required by nvim-tree.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 -- }}}
--- {{{ lazy.nvim bootstrap
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    'git', 'clone', '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable',
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
--- }}}
--- {{{ plugins (vim-plug -> lazy.nvim)
-require('lazy').setup({
-    { import = "plugins" }, -- charge tous les fichiers de ~/.config/nvim/lua/plugins/
-  -- colorscheme
-  { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
-
-  -- writing
---  { 'preservim/vim-pencil' },
---  { 'chrisbra/unicode.vim' },          -- deal with unicode caracters
---  { 'junegunn/vim-emoji' },            -- insert emoji
-
-  -- statusline
-  { 'nvim-lualine/lualine.nvim' },          -- vim airline replacement
-   dependencies = { 'nvim-tree/nvim-web-devicons' },
---  { 'vim-airline/vim-airline' },       -- powerline like style for status bar
---  { 'vim-airline/vim-airline-themes' },
-
-  -- git
-  { 'tpope/vim-fugitive' },            -- git plugin for vim
-  { 'mhinz/vim-signify' },             -- show difference in git
-
-  -- file / buffer navigation
---  { 'preservim/nerdtree' },            -- file system explorer
-  { 'nvim-tree/nvim-tree.lua'},        -- nerdtree equivalent for neovim
-  { 'wuelnerdotexe/nerdterm' },        -- toggle terminal
-  { 'ctrlpvim/ctrlp.vim' },            -- fuzzy file/buffer/mru/tag finder
-  { 'jlanzarotta/bufexplorer' },       -- buffer explorer
-  { 'mhinz/vim-startify' },            -- start screen
-  { 'gcmt/taboo.vim' },                -- rename tabs
-  { 'kshenoy/vim-signature' },         -- place/toggle/display marks
-  { 'junegunn/vim-peekaboo' },         -- display content of register dynamically
-
-  -- grammar / language tooling
-  { 'dpelle/vim-languagetool' },       -- LanguageTool grammar checker
-  { 'dpelle/vim-Grammalecte' },        -- French grammar checking
-
-  -- text editing helpers
-  { 'godlygeek/tabular' },             -- tabular alignment of data
---  { 'preservim/vim-markdown' },        -- syntax highlighting, matching rules
-  {
-    'MeanderingProgrammer/render-markdown.nvim', -- markdown module for neovim
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },            -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-    opts = {},
-  },
-  { 'elzr/vim-json' },                 -- JSON helper
-  { 'dhruvasagar/vim-table-mode' },
-
-  -- Claude Code integration
---  { 'rishi-opensource/vim-claude-code' },
-
-  -- LSP (legacy vim-lsp client — see note above re: Rust)
---  { 'prabirshrestha/vim-lsp' },
---  { 'mattn/vim-lsp-settings' },
---  { 'prabirshrestha/asyncomplete.vim' },     -- required by asyncomplete-lsp.vim, see note above
---  { 'prabirshrestha/asyncomplete-lsp.vim' },
-
-  -- tmux integration
-  { 'tmux-plugins/vim-tmux' },         -- syntax for .tmux.conf
-  { 'christoomey/vim-tmux-navigator' },
-
-  -- distraction-free writing
-  { 'pocco81/true-zen.nvim' },          -- goyo replacement for neovim
- -- { 'junegunn/goyo.vim' },
---  { 'junegunn/limelight.vim' },        -- complement of goyo
-
-  -- icons (load order matters less under lazy.nvim, but devicons
-  -- still wants to come after things that render icons)
-  { 'adelarsq/vim-emoji-icon-theme' },
-  { 'lambdalisue/vim-glyph-palette' }, -- apply color on Nerd Fonts
-  { 'ryanoasis/vim-devicons' },
-})
--- }}}
--- {{{ colorscheme
--- No ":colorscheme" call found in your original vimrc — uncomment
--- to actually activate catppuccin:
--- vim.cmd.colorscheme('catppuccin')
--- }}}
 -- {{{ plugin options
 
-vim.opt.completefunc = 'emoji#complete'
+--vim.opt.completefunc = 'emoji#complete'
 
 -- vim-lsp server registration, Python via pylsp
 --if vim.fn.executable('pylsp') == 1 then
@@ -131,6 +40,7 @@ vim.opt.completefunc = 'emoji#complete'
 --end
 
 require('lualine').setup ()
+require('toggleterm').setup()
 -- {{{{ nvim-tree setup
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
@@ -142,25 +52,11 @@ require("nvim-tree").setup()
 vim.g.languagetool_jar = vim.fn.expand('$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar')
 vim.g.grammalecte_cli_py = '/usr/bin/grammalecte-cli.py'
 
--- pencil options, like gutter color
-vim.g.pencil_gutter_color = 1
-vim.g['pencil#textwidth'] = 80
-vim.g.airline_section_x = '%{PencilMode()}'
-vim.g['pencil#wrapModelDefault'] = 'soft' -- default is 'hard'
-
-vim.g.vim_markdown_fenced_languages = { 'smalltalk=st' }
-vim.g.vim_markdown_folding_style_pythonic = 1
-vim.g.vim_markdown_folding_level = 1
-vim.g.vim_markdown_toc_autofit = 1
-vim.g.vim_markdown_strikethrough = 1
-vim.g.vim_markdown_edit_url_in = 'vsplit'
-
--- netrw browsing tweaks
-vim.g.netrw_banner = 0       -- disable annoying banner
-vim.g.netrw_browse_split = 4 -- open in prior window
-vim.g.netrw_altv = 1         -- open splits on the right
-vim.g.netrw_liststyle = 3    -- tree view
-vim.g.netrw_list_hide = [[,\(^\|\s\s\)\zs\.\S\+]]
+-- }}}
+-- {{{ colorscheme
+-- No ":colorscheme" call found in your original vimrc — uncomment
+-- to actually activate catppuccin:
+-- vim.cmd.colorscheme('catppuccin')
 -- }}}
 -- {{{ core options
 vim.opt.langmenu = 'en_US.UTF-8'   -- vim sera toujours en anglais
@@ -330,15 +226,10 @@ end
 vim.api.nvim_create_autocmd('User', { pattern = 'lsp_buffer_enabled', callback = on_lsp_buffer_enabled })
 -- }}}
 -- {{{ mappings
--- évite d'invoquer Ex
-vim.keymap.set('n', 'Q', '<nop>')
-
--- active NERDTree
-vim.keymap.set('', '<F2>', ':NvimTreeToggle<CR>')
-
--- active NERDTerm (<Plug> mapping needs remap = true)
-vim.keymap.set('n', '<leader>tt', '<Plug>(NERDTermToggle)', { remap = true })
-vim.keymap.set('t', '<leader>tt', '<Plug>(NERDTermToggle)', { remap = true })
+vim.keymap.set('n', 'Q', '<nop>')                       -- évite d'invoquer Ex
+vim.keymap.set('', '<F1>', ':ToggleBufExplorer<CR>')    -- active buf explorer
+vim.keymap.set('', '<F2>', ':NvimTreeToggle<CR>')       -- active NVimTree
+vim.keymap.set('', '<F3>', ':ToggleTerm<CR>')           -- active toggle term
 
 -- navigation dans l'aide Vim
 vim.keymap.set('n', '<CR>', '<C-]>')  -- activer un lien en appuyant sur Return
@@ -390,7 +281,7 @@ vim.keymap.set('n', '<tab>', '%')
 vim.keymap.set('v', '<tab>', '%')
 
 -- associe F1 à ESC, évite les erreurs
-vim.keymap.set({ 'i', 'n', 'v' }, '<F1>', '<ESC>')
+--vim.keymap.set({ 'i', 'n', 'v' }, '<F1>', '<ESC>')
 
 -- se déplacer plus facilement dans les fenêtres
 -- terminal mode
