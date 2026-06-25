@@ -14,7 +14,6 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 require("config.lazy")
-
 -- }}}
 -- {{{  disable netrw at the very start of your init.lua (required by nvim-tree.lua
 vim.g.loaded_netrw = 1
@@ -41,6 +40,7 @@ vim.g.loaded_netrwPlugin = 1
 
 require('lualine').setup ()
 require('toggleterm').setup()
+--require('vim-tmux-navigator').setup()
 -- {{{{ nvim-tree setup
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
@@ -80,6 +80,8 @@ vim.opt.autochdir = true -- change window cwd par rapport au fichier
 
 vim.opt.colorcolumn = '+1' -- met en évidence la colonne après 'textwidth'
 vim.cmd('highlight ColorColumn ctermbg=red guibg=#600000')
+
+--vim.opt.markdown_folding = 1 -- markdown folding
 
 vim.opt.mouse = 'c' -- disable mouse
 
@@ -282,24 +284,6 @@ vim.keymap.set('v', '<tab>', '%')
 
 -- associe F1 à ESC, évite les erreurs
 --vim.keymap.set({ 'i', 'n', 'v' }, '<F1>', '<ESC>')
-
--- se déplacer plus facilement dans les fenêtres
--- terminal mode
-vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]])
-vim.keymap.set('t', '<C-j>', '<C-w><C-w>j')
-vim.keymap.set('t', '<C-k>', '<C-w><C-w>k')
-vim.keymap.set('t', '<C-l>', '<C-w><C-w>l')
--- visual mode
-vim.keymap.set('v', '<C-h>', '<Esc><C-w>h')
-vim.keymap.set('v', '<C-j>', '<Esc><C-w>j')
-vim.keymap.set('v', '<C-k>', '<Esc><C-w>k')
-vim.keymap.set('v', '<C-l>', '<Esc><C-w>l')
--- normal mode
-vim.keymap.set('n', '<C-h>', '<C-w>h')
-vim.keymap.set('n', '<C-j>', '<C-w>j')
-vim.keymap.set('n', '<C-k>', '<C-w>k')
-vim.keymap.set('n', '<C-l>', '<C-w>l')
-vim.keymap.set('n', '<leader>w', '<C-w>v<C-w>l')
 
 -- terminal escape
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
