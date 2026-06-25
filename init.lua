@@ -1,43 +1,3 @@
--- ============================================================
--- init.lua — Neovim equivalent of _vimrc
--- ============================================================
---
--- WHAT CHANGED FROM THE ORIGINAL VIMRC
---   • Plugin manager: vim-plug -> lazy.nvim (modern Neovim standard)
---   • catppuccin/vim -> catppuccin/nvim — the Neovim-native rewrite
---     of the SAME theme by the SAME project, not a different plugin
---   • scrooloose/nerdtree -> preservim/nerdtree — ownership moved to
---     this org years ago; old URL still redirects but this is the
---     current canonical location
---   • Added prabirshrestha/asyncomplete.vim as an explicit plugin —
---     asyncomplete-lsp.vim is a *source* for this completion engine
---     and cannot function without it. It wasn't in your original
---     Plug list, so either it was pulled in as a transitive dep some
---     other way, or this was a gap. Flagging rather than guessing.
---   • Everything else is the exact same plugin you already use:
---     NERDTree, airline, fugitive, pencil, vim-claude-code, vim-lsp,
---     vim-markdown, ctrlp, goyo/limelight, devicons, all of it.
---
--- WHAT WAS DROPPED (Windows-GUI-only, irrelevant on Fedora/terminal)
---   • The has("windows")/shell=powershell block — was already
---     commented out in your original, so nothing functional lost
---   • The Alt-Space "system menu" mapping (has("gui") simalt block)
---   • The win32 guard around vim-tmux-navigator — always loads now,
---     since you're never on win32
---
--- RECONSTRUCTED
---   CleanDosCode() originally read "%s///g". Your comment above it
---   says it strips trailing ^M (carriage return) characters — that
---   literal control character almost certainly got eaten when the
---   file was saved/uploaded as plain text. Rebuilt below as
---   %s/\r//g to match the documented intent.
---
--- NOT FOUND
---   catppuccin is installed in your original but I don't see an
---   explicit ":colorscheme" command anywhere in the file, so it may
---   never have been activated. Left as a commented-out line below —
---   uncomment if you want it live.
---
 -- ONE DECISION TO MAKE BEFORE WE CONTAINERIZE FOR RUST
 --   Your vim-lsp setup (kept as-is below) auto-formats *.rs and
 --   *.go on save via LspDocumentFormatSync, and your pylsp block
@@ -54,7 +14,10 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 -- }}}
-
+-- {{{  disable netrw at the very start of your init.lua (required by nvim-tree.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+-- }}}
 -- {{{ lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -67,27 +30,30 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 -- }}}
-
 -- {{{ plugins (vim-plug -> lazy.nvim)
 require('lazy').setup({
+    { import = "plugins" }, -- charge tous les fichiers de ~/.config/nvim/lua/plugins/
   -- colorscheme
   { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
 
   -- writing
-  { 'preservim/vim-pencil' },
-  { 'chrisbra/unicode.vim' },          -- deal with unicode caracters
-  { 'junegunn/vim-emoji' },            -- insert emoji
+--  { 'preservim/vim-pencil' },
+--  { 'chrisbra/unicode.vim' },          -- deal with unicode caracters
+--  { 'junegunn/vim-emoji' },            -- insert emoji
 
   -- statusline
-  { 'vim-airline/vim-airline' },       -- powerline like style for status bar
-  { 'vim-airline/vim-airline-themes' },
+  { 'nvim-lualine/lualine.nvim' },          -- vim airline replacement
+   dependencies = { 'nvim-tree/nvim-web-devicons' },
+--  { 'vim-airline/vim-airline' },       -- powerline like style for status bar
+--  { 'vim-airline/vim-airline-themes' },
 
   -- git
   { 'tpope/vim-fugitive' },            -- git plugin for vim
   { 'mhinz/vim-signify' },             -- show difference in git
 
   -- file / buffer navigation
-  { 'preservim/nerdtree' },            -- file system explorer
+--  { 'preservim/nerdtree' },            -- file system explorer
+  { 'nvim-tree/nvim-tree.lua'},        -- nerdtree equivalent for neovim
   { 'wuelnerdotexe/nerdterm' },        -- toggle terminal
   { 'ctrlpvim/ctrlp.vim' },            -- fuzzy file/buffer/mru/tag finder
   { 'jlanzarotta/bufexplorer' },       -- buffer explorer
@@ -102,26 +68,36 @@ require('lazy').setup({
 
   -- text editing helpers
   { 'godlygeek/tabular' },             -- tabular alignment of data
-  { 'preservim/vim-markdown' },        -- syntax highlighting, matching rules
+--  { 'preservim/vim-markdown' },        -- syntax highlighting, matching rules
+  {
+    'MeanderingProgrammer/render-markdown.nvim', -- markdown module for neovim
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },            -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
   { 'elzr/vim-json' },                 -- JSON helper
   { 'dhruvasagar/vim-table-mode' },
 
   -- Claude Code integration
-  { 'rishi-opensource/vim-claude-code' },
+--  { 'rishi-opensource/vim-claude-code' },
 
   -- LSP (legacy vim-lsp client — see note above re: Rust)
-  { 'prabirshrestha/vim-lsp' },
-  { 'mattn/vim-lsp-settings' },
-  { 'prabirshrestha/asyncomplete.vim' },     -- required by asyncomplete-lsp.vim, see note above
-  { 'prabirshrestha/asyncomplete-lsp.vim' },
+--  { 'prabirshrestha/vim-lsp' },
+--  { 'mattn/vim-lsp-settings' },
+--  { 'prabirshrestha/asyncomplete.vim' },     -- required by asyncomplete-lsp.vim, see note above
+--  { 'prabirshrestha/asyncomplete-lsp.vim' },
 
   -- tmux integration
   { 'tmux-plugins/vim-tmux' },         -- syntax for .tmux.conf
   { 'christoomey/vim-tmux-navigator' },
 
   -- distraction-free writing
-  { 'junegunn/goyo.vim' },
-  { 'junegunn/limelight.vim' },        -- complement of goyo
+  { 'pocco81/true-zen.nvim' },          -- goyo replacement for neovim
+ -- { 'junegunn/goyo.vim' },
+--  { 'junegunn/limelight.vim' },        -- complement of goyo
 
   -- icons (load order matters less under lazy.nvim, but devicons
   -- still wants to come after things that render icons)
@@ -130,41 +106,38 @@ require('lazy').setup({
   { 'ryanoasis/vim-devicons' },
 })
 -- }}}
-
 -- {{{ colorscheme
 -- No ":colorscheme" call found in your original vimrc — uncomment
 -- to actually activate catppuccin:
 -- vim.cmd.colorscheme('catppuccin')
 -- }}}
-
 -- {{{ plugin options
-vim.g.airline_left_sep = ''  -- \uE0B0
-vim.g.airline_right_sep = '' -- \uE0B2
-vim.g.airline_theme = 'solarized'
-vim.g.airline_solarized_bg = 'base_16'
--- NB: original was "let airline_solarized_enable_command_color = 1"
--- (missing the g: prefix, so it never reached airline). Kept the
--- typo's effective behavior (no-op) rather than silently changing
--- functionality — let me know if you actually want this enabled
--- and I'll wire it up properly as vim.g.airline_solarized_enable_command_color.
 
 vim.opt.completefunc = 'emoji#complete'
 
 -- vim-lsp server registration, Python via pylsp
-if vim.fn.executable('pylsp') == 1 then
+--if vim.fn.executable('pylsp') == 1 then
   -- pip install python-lsp-server
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'lsp_setup',
-    callback = function()
-      vim.fn['lsp#register_server']({
-        name = 'pylsp',
-        cmd = function(_) return { 'pylsp' } end,
-        allowlist = { 'python' },
-      })
-    end,
-  })
-end
+--  vim.api.nvim_create_autocmd('User', {
+--    pattern = 'lsp_setup',
+--    callback = function()
+--      vim.fn['lsp#register_server']({
+--        name = 'pylsp',
+--        cmd = function(_) return { 'pylsp' } end,
+--        allowlist = { 'python' },
+--      })
+--    end,
+--  })
+--end
 
+require('lualine').setup ()
+-- {{{{ nvim-tree setup
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+-- }}}
 -- language tool configuration and document language
 vim.g.languagetool_jar = vim.fn.expand('$HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar')
 vim.g.grammalecte_cli_py = '/usr/bin/grammalecte-cli.py'
@@ -189,7 +162,6 @@ vim.g.netrw_altv = 1         -- open splits on the right
 vim.g.netrw_liststyle = 3    -- tree view
 vim.g.netrw_list_hide = [[,\(^\|\s\s\)\zs\.\S\+]]
 -- }}}
-
 -- {{{ core options
 vim.opt.langmenu = 'en_US.UTF-8'   -- vim sera toujours en anglais
 vim.opt.encoding = 'utf-8'         -- encodage par défaut
@@ -199,7 +171,10 @@ vim.opt.sessionoptions = 'blank,buffers,tabpages'
 vim.opt.fileformats = 'unix,dos,mac' -- use Unix as the standard file type
 
 -- background colors for active vs inactive windows (see WindowManagement augroup below)
-vim.cmd('highlight NormalNC ctermbg=237')
+-- vim.cmd('highlight NormalNC ctermbg=237')
+-- Background colors for active vs inactive window - in conjunction with augroup
+--highlight ActiveWindow guibg=#17252C
+--highlight InactiveWindow guibg=#0D1B22
 
 vim.g.limelight_conceal_ctermfg = 'gray' -- needed on terminal
 
@@ -290,7 +265,6 @@ vim.opt.matchtime = 2       -- how many tenths of a second to blink when matchin
 
 vim.cmd('highlight User1 guifg=#eea040')
 -- }}}
-
 -- {{{ custom functions
 
 -- fonction de nettoyage d'un fichier issu du monde dos:
@@ -322,32 +296,6 @@ local function syn_stack()
   display_status(vim.inspect(names))
 end
 vim.keymap.set('n', '<leader>sp', syn_stack)
-
--- goyo / limelight integration
-local function goyo_enter()
-  if vim.fn.executable('tmux') == 1 and vim.env.TMUX ~= nil and vim.env.TMUX ~= '' then
-    vim.fn.system('tmux set status off')
-    vim.fn.system([[tmux list-panes -F '#F' | grep -q Z || tmux resize-pane -Z]])
-  end
-  vim.opt.showmode = false
-  vim.opt.showcmd = false
-  vim.opt.scrolloff = 999
-  vim.cmd('Limelight')
-end
-
-local function goyo_leave()
-  if vim.fn.executable('tmux') == 1 and vim.env.TMUX ~= nil and vim.env.TMUX ~= '' then
-    vim.fn.system('tmux set status on')
-    vim.fn.system([[tmux list-panes -F '#F' | grep -q Z && tmux resize-pane -Z]])
-  end
-  vim.opt.showmode = true
-  vim.opt.showcmd = true
-  vim.opt.scrolloff = 5
-  vim.cmd('Limelight!')
-end
-
-vim.api.nvim_create_autocmd('User', { pattern = 'GoyoEnter', nested = true, callback = goyo_enter })
-vim.api.nvim_create_autocmd('User', { pattern = 'GoyoLeave', nested = true, callback = goyo_leave })
 
 -- vim-lsp buffer setup (see decision-point note at top of file re: Rust)
 local function on_lsp_buffer_enabled()
@@ -381,13 +329,12 @@ local function on_lsp_buffer_enabled()
 end
 vim.api.nvim_create_autocmd('User', { pattern = 'lsp_buffer_enabled', callback = on_lsp_buffer_enabled })
 -- }}}
-
 -- {{{ mappings
 -- évite d'invoquer Ex
 vim.keymap.set('n', 'Q', '<nop>')
 
 -- active NERDTree
-vim.keymap.set('', '<F2>', ':NERDTreeToggle<CR>')
+vim.keymap.set('', '<F2>', ':NvimTreeToggle<CR>')
 
 -- active NERDTerm (<Plug> mapping needs remap = true)
 vim.keymap.set('n', '<leader>tt', '<Plug>(NERDTermToggle)', { remap = true })
@@ -402,14 +349,14 @@ vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<CR>')
 vim.keymap.set('', '<leader>ev', ':vsplit $MYVIMRC<CR>')
 
 -- mapping pour emoji
-vim.keymap.set({ 'n', 'c', 'v' }, '<c-e>', '<nop>')
-vim.keymap.set('i', '<ScrollWheelUp>', '<Nop>')
-vim.keymap.set('i', '<c-x><c-e>', '<nop>')
-vim.keymap.set('i', '<ScrollWheelDown>', '<Nop>')
+--vim.keymap.set({ 'n', 'c', 'v' }, '<c-e>', '<nop>')
+--vim.keymap.set('i', '<ScrollWheelUp>', '<Nop>')
+--vim.keymap.set('i', '<c-x><c-e>', '<nop>')
+--vim.keymap.set('i', '<ScrollWheelDown>', '<Nop>')
 
 -- emoji complete configuration (<Plug> mapping needs remap = true)
-vim.g.emoji_complete_overwrite_standard_keymaps = 0
-vim.keymap.set('i', '<c-x><c-E>', '<Plug>(emoji-start-complete)', { remap = true })
+--vim.g.emoji_complete_overwrite_standard_keymaps = 0
+--vim.keymap.set('i', '<c-x><c-E>', '<Plug>(emoji-start-complete)', { remap = true })
 
 -- déplacement dans le fichier (disable arrow keys)
 vim.keymap.set('n', '<up>', '<nop>')
@@ -495,13 +442,12 @@ vim.keymap.set({ 'n', 'v', 'o' }, '<C-F4>', '<C-W>c')
 vim.keymap.set('i', '<C-F4>', '<C-O><C-W>c')
 vim.keymap.set('c', '<C-F4>', '<C-C><C-W>c')
 -- }}}
-
 -- {{{ autocmd groups
 
 -- highlight active vs inactive window (uses NormalNC defined above)
-local window_management = vim.api.nvim_create_augroup('WindowManagement', { clear = true })
-vim.api.nvim_create_autocmd('WinEnter', { group = window_management, pattern = '*', command = 'setl wincolor=Normal' })
-vim.api.nvim_create_autocmd('WinLeave', { group = window_management, pattern = '*', command = 'setl wincolor=NormalNC' })
+--local window_management = vim.api.nvim_create_augroup('WindowManagement', { clear = true })
+--vim.api.nvim_create_autocmd('WinEnter', { group = window_management, pattern = '*', command = 'setl winhighlight=Normal' })
+--vim.api.nvim_create_autocmd('WinLeave', { group = window_management, pattern = '*', command = 'setl winhighlight=NormalNC' })
 
 -- always open help vertically in the far right window
 local vimrc_help = vim.api.nvim_create_augroup('vimrc_help', { clear = true })
