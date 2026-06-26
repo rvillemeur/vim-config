@@ -3,31 +3,15 @@
 -- Rendu riche : Markdown, LaTeX/math, images
 -- =============================================================
 --
--- INSTALLATION
---   Placer ce fichier dans ~/.config/nvim/lua/plugins/
---   lazy.nvim le détecte automatiquement si tu utilises le
---   pattern de chargement par répertoire (import = "plugins").
---
---   Si ton init.lua charge lazy.nvim avec un seul fichier de
---   spec, ajouter à la table specs :
---     require("plugins.markdown-rich")
---
--- PRÉREQUIS SYSTÈME (Fedora)
---   sudo dnf install -y ImageMagick luarocks      # image.nvim
---   pip install --user pynvim                     # certains backends
---
 -- TERMINAL COMPATIBLE IMAGES
 --   image.nvim nécessite un terminal avec protocole graphique :
 --   • Kitty  → kitty.conf : graphics_protocol kitty   [recommandé]
---   • WezTerm → supporté nativement
 --   • Foot, Ghostty → supportés
---   KDE Konsole ne supporte PAS les protocoles graphiques (2026).
---   Alternative : utiliser WezTerm ou Kitty comme terminal principal.
 --
 -- =============================================================
 
 return {
-
+-- {{{ render-markdown
   -- ----------------------------------------------------------
   -- 1. render-markdown.nvim
   --    Rendu Markdown inline dans le buffer (headers stylisés,
@@ -49,7 +33,7 @@ return {
       -- Rendu des blocs de code avec fond coloré
       code = {
         enabled = true,
-        style = "full",           -- "full" | "normal" | "language" | "none"
+        style = "language",           -- "full" | "normal" | "language" | "none"
         border = "thin",
       },
       -- Rendu des headers (H1–H6) avec icônes et couleurs
@@ -84,7 +68,8 @@ return {
       { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>", desc = "Toggle Markdown render" },
     },
   },
-
+-- }}}
+-- {{{ nabla
   -- ----------------------------------------------------------
   -- 2. nabla.nvim
   --    Rendu LaTeX/math INLINE dans le buffer via virtualtext
@@ -120,7 +105,8 @@ return {
       })
     end,
   },
-
+-- }}}
+-- {{{ markdown preview
   -- ----------------------------------------------------------
   -- 3. markdown-preview.nvim
   --    Preview complète dans le navigateur : Markdown + math
@@ -155,7 +141,8 @@ return {
       }
     end,
   },
-
+-- }}}
+-- {{{ image.nvim
   -- ----------------------------------------------------------
   -- 4. image.nvim
   --    Rendu d'images INLINE dans le buffer Neovim.
@@ -207,7 +194,8 @@ return {
       hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" },
     },
   },
-
+-- }}}
+-- {{{ nvim-treesitter
   -- ----------------------------------------------------------
   -- 5. nvim-treesitter (parsers requis)
   --    Si tu as déjà treesitter dans ton init.lua, ajouter
@@ -226,7 +214,7 @@ return {
       })
     end,
   },
-
+-- }}}
 }
 
 -- =============================================================
@@ -239,16 +227,4 @@ return {
 --  <leader>mb   Ouvrir/fermer preview navigateur (markdown-preview)
 --
 -- =============================================================
--- NOTES D'INTÉGRATION
--- =============================================================
---
--- render-markdown.nvim et image.nvim se coordonnent automatiquement
--- quand les deux sont actifs : render-markdown délègue le rendu
--- des images à image.nvim si celui-ci est chargé.
---
--- nabla.nvim opère sur les formules dans le buffer texte ;
--- markdown-preview les renvoie à KaTeX dans le navigateur.
--- Les deux sont complémentaires : nabla pour l'aperçu rapide
--- sans quitter Neovim, preview pour le rendu typographique final.
---
--- =============================================================
+-- vim: set foldmethod=marker foldmarker={{{,}}} foldlevel=0 :
