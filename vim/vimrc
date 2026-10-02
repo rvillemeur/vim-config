@@ -58,6 +58,7 @@ Plug 'junegunn/limelight.vim'   "distraction free vim, complement of goyo
 Plug 'junegunn/vim-peekaboo'    "Display content of register dynamically
 if !has('win32')
     Plug 'christoomey/vim-tmux-navigator'
+    Plug 'preservim/vimux'      "ouvre une commande dans tmux à partir de vim
 endif
 Plug 'mhinz/vim-signify'        "show difference in git 
 Plug 'adelarsq/vim-emoji-icon-theme' "another emoji, test from devicons
