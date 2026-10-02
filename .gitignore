@@ -1,4 +1,13 @@
 bundle
-.vimrc.swp
-.gvimrc.swp
-LanguageTool-6.0
+
+# Vim swap files (vimrc and gvimrc now live in vim/).
+.*.sw[a-p]
+vim/.*.sw[a-p]
+
+# LanguageTool is a vendored binary tree (~600 MB), so it is not versioned.
+# Both vim/vimrc and nvim/lua/plugins/writing.lua expect the jar at
+# $HOME/devzone/vim-config/LanguageTool-5.9/languagetool-commandline.jar
+# On a fresh clone, download the archive from https://languagetool.org/download/
+# and unzip it here, or update those two paths to the version you install.
+LanguageTool-5.9/
+LanguageTool-6.0/
